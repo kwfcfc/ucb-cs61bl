@@ -30,14 +30,16 @@ public class Account {
      * would leave a negative balance, print an error message and leave the
      * balance unchanged.
      */
-    public void withdraw(int amount) {
-        // TODO
+    public boolean withdraw(int amount) {
         if (amount < 0) {
             System.out.println("Cannot withdraw negative amount.");
+            return false;
         } else if (balance < amount) {
             System.out.println("Insufficient funds");
+            return false;
         } else {
             balance -= amount;
+            return true;
         }
     }
 
@@ -46,6 +48,10 @@ public class Account {
      * and depositing it into this account.
      */
     public void merge(Account other) {
-        // TODO
+        // this merge is not multi threads safe.
+        int other_balance = other.getBalance();
+        if (other.withdraw(other_balance)) {
+            this.deposit(other_balance);
+        }
     }
 }
