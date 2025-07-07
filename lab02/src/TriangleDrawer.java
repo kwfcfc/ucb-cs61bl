@@ -6,7 +6,7 @@ public class TriangleDrawer {
         while (i < SIZE) {
             int count = 1;
             while (count < i + 1) {
-                System.out.print("* ");
+                System.out.print("*");
                 count++;
             }
             System.out.println("*");
