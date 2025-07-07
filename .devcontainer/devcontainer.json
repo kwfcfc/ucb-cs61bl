@@ -25,7 +25,10 @@
           "fish": {
             "path": "/usr/bin/fish"
           }
-        }
+        },
+        "java.project.referencedLibraries": [
+          "/workspaces/library-su25/*.jar"
+        ]
       },
       "extensions": [
         "vscjava.vscode-java-pack"
@@ -47,5 +50,6 @@
       }
     }
   },
+  "postCreateCommand": "cd /workspaces && git clone https://github.com/cs61bl/library-su25",
   "remoteUser": "vscode"
 }
