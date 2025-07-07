@@ -4,11 +4,13 @@ public class Path {
     private Point next;
 
     public Path() {
-        curr = new Point();
+        next = new Point();
+        curr = new Point(next);
     }
 
     public Path(double x, double y) {
         next = new Point(x, y);
+        curr = new Point(next);
     }
 
     public double getCurrX() {
