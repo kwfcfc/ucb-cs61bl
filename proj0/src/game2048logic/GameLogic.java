@@ -1,13 +1,6 @@
 package game2048logic;
 
-import edu.princeton.cs.algs4.In;
 import game2048rendering.Side;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Stack;
-
-import org.checkerframework.checker.units.qual.min;
 
 import static game2048logic.MatrixUtils.rotateLeft;
 import static game2048logic.MatrixUtils.rotateRight;
@@ -29,28 +22,28 @@ public class GameLogic {
      *         if no merge occurs, then return minR.
      */
     public static int moveTileUpAsFarAsPossible(int[][] board, int r, int c, int minR) {
-        int current_tile = board[r][c];
-        if (current_tile == 0 || r == 0) {
+        int currentTile = board[r][c];
+        if (currentTile == 0 || r == 0) {
             return minR;
         }
         if (r <= minR) {
             return minR;
         }
         for (int i = r - 1; i >= minR; i--) {
-            if (board[i][c] == current_tile) {
-                board[i][c] += current_tile;
+            if (board[i][c] == currentTile) {
+                board[i][c] += currentTile;
                 board[r][c] = 0;
                 return i + 1;
             } else if (board[i][c] > 0) {
                 if (i != r - 1) { // no merge occurs, and has moving
-                    board[i + 1][c] = current_tile;
+                    board[i + 1][c] = currentTile;
                     board[r][c] = 0;
                 }
                 return minR;
             }
         }
         // all tile above the current tile is empty, move up to the top.
-        board[minR][c] = current_tile;
+        board[minR][c] = currentTile;
         board[r][c] = 0;
         return minR;
     }
@@ -78,7 +71,6 @@ public class GameLogic {
         for (int c = 0; c < board[0].length; c++) {
             tiltColumn(board, c);
         }
-        return;
     }
 
     /**
@@ -91,24 +83,20 @@ public class GameLogic {
     public static void tilt(int[][] board, Side side) {
         if (side == Side.NORTH) {
             tiltUp(board);
-            return;
         } else if (side == Side.EAST) {
             rotateLeft(board);
             tiltUp(board);
             rotateRight(board);
-            return;
         } else if (side == Side.SOUTH) {
             rotateLeft(board);
             rotateLeft(board);
             tiltUp(board);
             rotateLeft(board);
             rotateLeft(board);
-            return;
         } else if (side == Side.WEST) {
             rotateRight(board);
             tiltUp(board);
             rotateLeft(board);
-            return;
         } else {
             System.out.println("Invalid side specified");
         }
