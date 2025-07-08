@@ -29,7 +29,10 @@ public class GameLogic {
         if (current_tile == 0 || r == 0) {
             return 0;
         }
-        for (int i = r - 1; i >= 0; i-- ) {
+        if (r <= minR) {
+            return minR;
+        }
+        for (int i = r - 1; i >= minR; i-- ) {
             if (board[i][c] == current_tile) {
                 board[i][c] += current_tile;
                 board[r][c] = 0;
@@ -43,9 +46,9 @@ public class GameLogic {
             }
         }
         // all tile above the current tile is empty, move up to the top.
-        board[0][c] = current_tile;
+        board[minR][c] = current_tile;
         board[r][c] = 0;
-        return 0;
+        return minR;
     }
 
     /**
