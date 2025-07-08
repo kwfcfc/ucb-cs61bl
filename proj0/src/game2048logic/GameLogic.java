@@ -1,6 +1,12 @@
 package game2048logic;
 
+import edu.princeton.cs.algs4.In;
 import game2048rendering.Side;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Stack;
+
 import static game2048logic.MatrixUtils.rotateLeft;
 import static game2048logic.MatrixUtils.rotateRight;
 
@@ -19,7 +25,20 @@ public class GameLogic {
      *              if no merge occurs, then return minR.
      */
     public static int moveTileUpAsFarAsPossible(int[][] board, int r, int c, int minR) {
-        // TODO: Fill this in in tasks 2, 3, 4
+        int current_tile = board[r][c];
+        if (current_tile == 0 || r == 0) {
+            return 0;
+        }
+        for (int i = r - 1; i >= 0; i-- ) {
+            if (board[i][c] > 0) {
+                board[i + 1][c] = current_tile;
+                board[r][c] = 0;
+                return i + 1;
+            }
+        }
+        // all tile above the current tile is empty, move up to the top.
+        board[0][c] = current_tile;
+        board[r][c] = 0;
         return 0;
     }
 
@@ -31,8 +50,23 @@ public class GameLogic {
      * @param c         the column to tilt up.
      */
     public static void tiltColumn(int[][] board, int c) {
-        // TODO: fill this in in task 5
-        return;
+        Stack<Integer> stack = new Stack<>();
+        for (int[] row : board) {
+            if (row[c] > 0) {
+                if (stack.empty() || stack.peek() != row[c]) {
+                    stack.push(row[c]);
+                } else if (stack.peek() == row[c]) {
+                    int merge = stack.pop() + row[c];
+                    stack.push(merge);
+                }
+            }
+        }
+        for (int i = board.length - 1; i >= stack.size(); i--) {
+            board[i][c] = 0;
+        }
+        for (int i = stack.size() - 1; i >= 0; i--) {
+            board[i][c] = stack.pop();
+        }
     }
 
     /**
