@@ -72,7 +72,9 @@ public class GameLogic {
      * @param board     the current state of the board.
      */
     public static void tiltUp(int[][] board) {
-        // TODO: fill this in in task 6
+        for (int c = 0; c < board[0].length; c++) {
+            tiltColumn(board, c);
+        }
         return;
     }
 
@@ -84,14 +86,25 @@ public class GameLogic {
      * @param side  the direction to tilt
      */
     public static void tilt(int[][] board, Side side) {
-        // TODO: fill this in in task 7
         if (side == Side.NORTH) {
+            tiltUp(board);
             return;
         } else if (side == Side.EAST) {
+            rotateLeft(board);
+            tiltUp(board);
+            rotateRight(board);
             return;
         } else if (side == Side.SOUTH) {
+            rotateLeft(board);
+            rotateLeft(board);
+            tiltUp(board);
+            rotateLeft(board);
+            rotateLeft(board);
             return;
         } else if (side == Side.WEST) {
+            rotateRight(board);
+            tiltUp(board);
+            rotateLeft(board);
             return;
         } else {
             System.out.println("Invalid side specified");
