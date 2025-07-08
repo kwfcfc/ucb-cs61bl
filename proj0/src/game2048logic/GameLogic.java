@@ -42,6 +42,7 @@ public class GameLogic {
                     return minR;
                 }
                 board[i + 1][c] = current_tile;
+                board[r][c] = 0;
                 return i + 1;
             }
         }
@@ -59,22 +60,9 @@ public class GameLogic {
      * @param c         the column to tilt up.
      */
     public static void tiltColumn(int[][] board, int c) {
-        Stack<Integer> stack = new Stack<>();
-        for (int[] row : board) {
-            if (row[c] > 0) {
-                if (stack.empty() || stack.peek() != row[c]) {
-                    stack.push(row[c]);
-                } else if (stack.peek() == row[c]) {
-                    int merge = stack.pop() + row[c];
-                    stack.push(merge);
-                }
-            }
-        }
-        for (int i = board.length - 1; i >= stack.size(); i--) {
-            board[i][c] = 0;
-        }
-        for (int i = stack.size() - 1; i >= 0; i--) {
-            board[i][c] = stack.pop();
+        int minR = 0;
+        for (int i = 1; i < board.length; i++) {
+            minR = moveTileUpAsFarAsPossible(board, i, c, minR);
         }
     }
 
