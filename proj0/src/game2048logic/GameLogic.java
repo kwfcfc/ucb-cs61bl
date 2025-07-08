@@ -30,9 +30,15 @@ public class GameLogic {
             return 0;
         }
         for (int i = r - 1; i >= 0; i-- ) {
-            if (board[i][c] > 0) {
-                board[i + 1][c] = current_tile;
+            if (board[i][c] == current_tile) {
+                board[i][c] += current_tile;
                 board[r][c] = 0;
+                return i + 1;
+            } else if (board[i][c] > 0) {
+                if (i == r - 1) { // no moving
+                    return minR;
+                }
+                board[i + 1][c] = current_tile;
                 return i + 1;
             }
         }
