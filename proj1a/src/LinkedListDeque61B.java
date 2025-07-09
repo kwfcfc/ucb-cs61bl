@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class LinkedListDeque61B<T> implements Deque61B<T> {
@@ -14,7 +15,9 @@ public class LinkedListDeque61B<T> implements Deque61B<T> {
             this.next = next;
             this.prev = prev;
         }
-        
+
+        public ListNode() {}
+
         @Override
         public boolean equals(Object o) {
             if (o == null) {
@@ -28,37 +31,47 @@ public class LinkedListDeque61B<T> implements Deque61B<T> {
 
         @Override
         public String toString() {
-            return this.item.toString();
+            return this.item == null ? "" : this.item.toString();
         }
     }
 
     public LinkedListDeque61B() {
-        this.sentinel = new ListNode(null, sentinel, sentinel);
+        this.sentinel = new ListNode();
+        this.sentinel.next = sentinel;
+        this.sentinel.prev = sentinel;
         size = 0;
     }
 
     @Override
     public void addFirst(T x) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addFirst'");
+        ListNode newNode = new ListNode(x, sentinel.next, sentinel);
+        sentinel.next.prev = newNode;
+        sentinel.next = newNode;
+        size += 1;
     }
 
     @Override
     public void addLast(T x) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addLast'");
+        ListNode newNode = new ListNode(x, sentinel, sentinel.prev);
+        sentinel.prev.next = newNode;
+        sentinel.prev = newNode;
+        size += 1;
     }
 
     @Override
     public List<T> toList() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'toList'");
+        List<T> result = new ArrayList<>();
+        ListNode iterator = sentinel.next;
+        while (iterator != sentinel) {
+            result.add(iterator.item);
+            iterator = iterator.next;
+        }
+        return result;
     }
 
     @Override
     public boolean isEmpty() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'isEmpty'");
+        return size == 0;
     }
 
     @Override
