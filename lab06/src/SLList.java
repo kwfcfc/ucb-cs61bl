@@ -114,11 +114,29 @@ public class SLList {
 
     /** Adds x to the list at the specified index. */
     public void add(int index, int x) {
-        // TODO: YOUR CODE HERE
+        if (index < 0) {
+            throw new IllegalArgumentException("index starts at 0.");
+        }
+        IntListNode iterator = sentinel;
+        while (index > 0 && iterator.next != sentinel) {
+            iterator = iterator.next;
+            index--;
+        }
+        iterator.next = new IntListNode(x, iterator.next);
+        size += 1;
     }
 
     /** Destructively reverses this list. */
     public void reverse() {
-        // TODO: YOUR CODE HERE
+        IntListNode iterator = this.sentinel.next;
+        IntListNode reversed_head = this.sentinel;
+        IntListNode temp = null;
+        while (iterator != this.sentinel) {
+            temp = iterator;
+            iterator = iterator.next;
+            temp.next = reversed_head;
+            reversed_head = temp;
+        }
+        sentinel.next = reversed_head;
     }
 }
