@@ -113,7 +113,12 @@ public class IntList {
      * @param value, the int to be added.
      */
     public void add(int value) {
-        // TODO: YOUR CODE HERE
+        IntList newNode = new IntList(value);
+        IntList iterator = this;
+        while (iterator.next != null) {
+            iterator = iterator.next;
+        }
+        iterator.next = newNode;
     }
 
     /**
@@ -122,8 +127,15 @@ public class IntList {
      * @return smallest element in the list
      */
     public int smallest() {
-        // TODO: YOUR CODE HERE
-        return -1;
+        int min = this.item;
+        IntList iterator = this.next;
+        while (iterator != null) {
+            if (iterator.item < min) {
+                min = iterator.item;
+            }
+            iterator = iterator.next;
+        }
+        return min;
     }
 
     /**
@@ -132,8 +144,13 @@ public class IntList {
      * @return The sum of squares of all elements.
      */
     public int squaredSum() {
-        // TODO: YOUR CODE HERE
-        return -1;
+        int sum = this.item * this.item;
+        IntList iterator = this.next;
+        while (iterator != null) {
+            sum += iterator.item * iterator.item;
+            iterator = iterator.next;
+        }
+        return sum;
     }
 
     /**
@@ -191,8 +208,21 @@ public class IntList {
      * @return new list with A followed by B.
      */
     public static IntList catenate(IntList A, IntList B) {
-        // TODO: YOUR CODE HERE
-        return null;
+        IntList res = new IntList(A.item);
+        IntList pointer = res;
+        IntList iterator = A.next;
+        while (iterator != null) {
+            pointer.next = new IntList(iterator.item);
+            pointer = pointer.next;
+            iterator = iterator.next;
+        }
+        iterator = B;
+        while (iterator != null) {
+            pointer.next = new IntList(iterator.item);
+            pointer = pointer.next;
+            iterator = iterator.next;
+        }
+        return res;
     }
 
     /**
@@ -203,7 +233,11 @@ public class IntList {
      * @return new list with A followed by B.
      */
     public static IntList dcatenate(IntList A, IntList B) {
-        // TODO: YOUR CODE HERE
-        return null;
+        IntList iterator = A;
+        while (iterator.next != null) {
+            iterator = iterator.next;
+        }
+        iterator.next = B;
+        return A;
     }
 }
