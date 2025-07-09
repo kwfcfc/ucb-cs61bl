@@ -81,14 +81,28 @@ public class LinkedListDeque61B<T> implements Deque61B<T> {
 
     @Override
     public T removeFirst() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'removeFirst'");
+        if (this.isEmpty()) {
+            return null;
+        }
+        T result = sentinel.next.item;
+        ListNode newFirst = sentinel.next.next;
+        newFirst.prev = sentinel;
+        sentinel.next = newFirst;
+        size -= 1;
+        return result;
     }
 
     @Override
     public T removeLast() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'removeLast'");
+        if (this.isEmpty()) {
+            return null;
+        }
+        T result = sentinel.prev.item;
+        ListNode newLast = sentinel.prev.prev;
+        newLast.next = sentinel;
+        sentinel.prev = newLast;
+        size -= 1;
+        return result;
     }
 
     @Override
