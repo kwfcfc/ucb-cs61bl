@@ -68,4 +68,49 @@ public class LinkedListDeque61BTest {
         assertThat(lld1.isEmpty()).isFalse();
     }
 
+    @Test
+    public void sizeTest() {
+        Deque61B<Double> lld1 = new LinkedListDeque61B<>();
+        
+        assertThat(lld1.size()).isEqualTo(0);
+
+        lld1.addFirst( 8.9);
+        lld1.addLast(6.4);
+        
+        assertThat(lld1.size()).isEqualTo(2);
+    }
+
+    @Test
+    public void getTest() {
+        Deque61B<Double> lld1 = new LinkedListDeque61B<>();
+
+        assertWithMessage("get 0 from empty list").that(lld1.get(0)).isNull();
+
+        lld1.addLast(7.3);
+        lld1.addFirst(23.4);        
+        lld1.addFirst(-2.4);
+
+        assertWithMessage("get negative index should return null").that(lld1.get(-1)).isNull();
+        assertWithMessage("get out of bound index should return null").that(lld1.get(8)).isNull();        
+        assertThat(lld1.get(2)).isEqualTo(7.3);
+        assertThat(lld1.get(0)).isEqualTo(-2.4);
+        assertThat(lld1.get(1)).isEqualTo(23.4);
+    }
+
+    @Test
+    public void getRecursiveTest() {
+        Deque61B<Double> lld1 = new LinkedListDeque61B<>();
+
+        assertWithMessage("get 0 from empty list").that(lld1.getRecursive(0)).isNull();
+
+        lld1.addLast(7.3);
+        lld1.addFirst(23.4);        
+        lld1.addFirst(-2.4);
+
+        assertWithMessage("get negative index should return null").that(lld1.get(-1)).isNull();
+        assertWithMessage("get out of bound index should return null").that(lld1.get(8)).isNull();        
+        assertThat(lld1.getRecursive(2)).isEqualTo(7.3);
+        assertThat(lld1.getRecursive(0)).isEqualTo(-2.4);
+        assertThat(lld1.getRecursive(1)).isEqualTo(23.4);
+    }    
 }

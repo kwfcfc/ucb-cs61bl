@@ -76,8 +76,7 @@ public class LinkedListDeque61B<T> implements Deque61B<T> {
 
     @Override
     public int size() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'size'");
+        return this.size;
     }
 
     @Override
@@ -94,14 +93,36 @@ public class LinkedListDeque61B<T> implements Deque61B<T> {
 
     @Override
     public T get(int index) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'get'");
+        if (index < 0 || index >= size) {
+            return null;
+        }
+        boolean fromStart = 2 * index > size;
+        ListNode iterator = sentinel;
+        if (fromStart) {
+            for (int i = 0; i <= index; i++) {
+                iterator = iterator.next;
+            }
+        } else {
+            for (int i = size - 1; i >= index; i--) {
+                iterator = iterator.prev;
+            }
+        }
+        return iterator.item;
     }
 
     @Override
     public T getRecursive(int index) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getRecursive'");
+        if (index < 0 || index >= size) {
+            return null;
+        }
+        return getRecursiveHelper(sentinel.next, index);
     }
 
+    private T getRecursiveHelper(ListNode start, int index) {
+        if (index == 0) {
+            return start.item;
+        } else {
+            return getRecursiveHelper(start.next, index - 1);
+        }
+    }
 }
