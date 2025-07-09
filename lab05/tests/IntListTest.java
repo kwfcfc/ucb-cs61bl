@@ -179,8 +179,10 @@ public class IntListTest {
     public void testCatenate() {
         IntList A = IntList.of(8, 3, 5, 9);
         IntList B = IntList.of(6);
-        assertWithMessage("concatenate with empty list")
+        assertWithMessage("concatenate with empty list 1")
                 .that(IntList.catenate(A, IntList.of()).equals(IntList.of(8, 3, 5, 9))).isTrue();
+        assertWithMessage("concatenate with empty list 2")
+                .that(IntList.catenate(IntList.of(), A).equals(IntList.of(8, 3, 5, 9))).isTrue();                
         assertWithMessage("concatenate with singleton list")
                 .that(IntList.catenate(B, A).equals(IntList.of(6, 8, 3, 5, 9))).isTrue();
         assertWithMessage("concatenate with itself")
@@ -193,6 +195,8 @@ public class IntListTest {
         IntList B = IntList.of(6);
         assertWithMessage("dconcatenate with empty list")
                 .that(IntList.dcatenate(A, IntList.of()).equals(IntList.of(8, 3, 5, 9))).isTrue();
+        assertWithMessage("dconcatenate with empty list")
+                .that(IntList.dcatenate(IntList.of(), A).equals(IntList.of(8, 3, 5, 9))).isTrue();                
         assertWithMessage("concatenate with singleton list")
                 .that(IntList.dcatenate(A, B).equals(IntList.of( 8, 3, 5, 9, 6))).isTrue();
         assertWithMessage("concatenate with the same singleton")

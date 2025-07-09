@@ -208,21 +208,29 @@ public class IntList {
      * @return new list with A followed by B.
      */
     public static IntList catenate(IntList A, IntList B) {
-        IntList res = new IntList(A.item);
-        IntList pointer = res;
-        IntList iterator = A.next;
-        while (iterator != null) {
-            pointer.next = new IntList(iterator.item);
-            pointer = pointer.next;
+        IntList result = A == null ? new IntList(B.item, B.next) : new IntList(A.item, A.next);
+        IntList iterator = result;
+
+        while (iterator.next != null) {
+            IntList oldNode = iterator.next;
+            iterator.next = new IntList(oldNode.item, oldNode.next);
             iterator = iterator.next;
         }
-        iterator = B;
-        while (iterator != null) {
-            pointer.next = new IntList(iterator.item);
-            pointer = pointer.next;
+
+        // if the A is not null, it means we only traversed the B
+        if (A == null) {
+            return result;
+        } else {
+            iterator.next = B;
+        }
+
+        while (iterator.next != null) {
+            IntList oldNode = iterator.next;
+            iterator.next = new IntList(oldNode.item, oldNode.next);
             iterator = iterator.next;
         }
-        return res;
+
+        return result;
     }
 
     /**
@@ -233,6 +241,9 @@ public class IntList {
      * @return new list with A followed by B.
      */
     public static IntList dcatenate(IntList A, IntList B) {
+        if (A == null) {
+            return B;
+        }
         IntList iterator = A;
         while (iterator.next != null) {
             iterator = iterator.next;
