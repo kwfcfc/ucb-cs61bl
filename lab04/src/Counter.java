@@ -17,5 +17,4 @@ public class Counter {
     public int value() {
         return myCount;
     }
-
 }
