@@ -179,6 +179,8 @@ public class IntListTest {
     public void testCatenate() {
         IntList A = IntList.of(8, 3, 5, 9);
         IntList B = IntList.of(6);
+        assertWithMessage("concatenate with two empty lists")
+                .that(IntList.catenate(IntList.of(), IntList.of())).isNull();     
         assertWithMessage("concatenate with empty list 1")
                 .that(IntList.catenate(A, IntList.of()).equals(IntList.of(8, 3, 5, 9))).isTrue();
         assertWithMessage("concatenate with empty list 2")
@@ -192,7 +194,9 @@ public class IntListTest {
     @Test
     public void testDCatenate() {
         IntList A = IntList.of(8, 3, 5, 9);
-        IntList B = IntList.of(6);
+        IntList B = IntList.of(6);  
+        assertWithMessage("concatenate with two empty lists")
+                .that(IntList.catenate(IntList.of(), IntList.of())).isNull();        
         assertWithMessage("dconcatenate with empty list")
                 .that(IntList.dcatenate(A, IntList.of()).equals(IntList.of(8, 3, 5, 9))).isTrue();
         assertWithMessage("dconcatenate with empty list")

@@ -208,6 +208,9 @@ public class IntList {
      * @return new list with A followed by B.
      */
     public static IntList catenate(IntList A, IntList B) {
+        if (A == null && B == null) {
+            return null;
+        }
         IntList result = A == null ? new IntList(B.item, B.next) : new IntList(A.item, A.next);
         IntList iterator = result;
 
