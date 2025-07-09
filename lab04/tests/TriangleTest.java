@@ -85,6 +85,6 @@ public abstract class TriangleTest {
     public void testSquaredHypotenuseTriangle() {
         Triangle t = getNewTriangle();
         int result = t.squaredHypotenuse(12, 5);
-        assertWithMessage("Hypotenuse not correct.").that(result).isEqualTo(13);
+        assertWithMessage("Hypotenuse not correct.").that(result).isEqualTo(169);
     }
 }
