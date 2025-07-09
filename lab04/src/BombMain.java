@@ -1,3 +1,5 @@
+import java.util.Collections;
+
 public class BombMain {
     public static void main(String[] args) {
         int phase = 2;
@@ -10,13 +12,15 @@ public class BombMain {
         //              take you to the method definition.
         Bomb b = new Bomb();
         if (phase >= 0) {
-            b.phase0(null); // Figure this out. I wonder where the phases are defined...
+            b.phase0("39291226"); // Figure this out. I wonder where the phases are defined...
         }
         if (phase >= 1) {
-            b.phase1(null); // Figure this out next
+            b.phase1(new int[]{0, 9, 3, 0, 8}); // Figure this out next
         }
         if (phase >= 2) {
-            b.phase2("Figure this out last!");
+            String fourtyTwo = "0";
+            String placeholder = String.join(" ", Collections.nCopies(1337, fourtyTwo));
+            b.phase2(placeholder + " -81201430");
         }
     }
 }
