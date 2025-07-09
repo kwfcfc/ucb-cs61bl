@@ -16,7 +16,7 @@ public class LinkedListDeque61B<T> implements Deque61B<T> {
             this.prev = prev;
         }
 
-        public ListNode() {}
+        public ListNode() { }
 
         @Override
         public boolean equals(Object o) {
