@@ -2,10 +2,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /** Represents an example of how a website might model a user. */
-public class User {
-    /* TODO: Make Users a comparable type.
-        Use parameterization (ie. <>) to ensure that User can only be
-        used to compare against other Users. */
+public class User implements Comparable<User> {
     private static int nextId = 1;
 
     private static final int AGE_MODULUS = 13;
@@ -21,7 +18,9 @@ public class User {
         nextId += 1;
     }
 
-    /** Force assign an id to a created user **/
+    /**
+     * Force assign an id to a created user
+     **/
     public User(int id, String name, String email) {
         this.id = id;
         this.name = name;
@@ -29,7 +28,9 @@ public class User {
         setAge();
     }
 
-    /** For this assignment, age is just an automatically assigned field. */
+    /**
+     * For this assignment, age is just an automatically assigned field.
+     */
     void setAge() {
         age = (id % AGE_MODULUS) + AGE_CONSTANT;
     }
@@ -63,7 +64,9 @@ public class User {
         return "User{" + "id=" + id + ", name=" + name + ", email=" + email + "}";
     }
 
-    /** Returns whether or not two Users are considered equal to each other. */
+    /**
+     * Returns whether or not two Users are considered equal to each other.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -80,6 +83,15 @@ public class User {
         } else {
             return Objects.equals(email, other.email);
         }
+    }
+
+
+    @Override
+    public int compareTo(User o) {
+        if (this.id == o.getId()) {
+            return this.name.compareTo(o.getName());
+        }
+        return Integer.compare(this.id, o.getId());
     }
 
     public static void main(String[] args) {
