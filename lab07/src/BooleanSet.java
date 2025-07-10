@@ -16,13 +16,15 @@ public class BooleanSet implements SimpleSet {
     /** Adds k to the set. */
     @Override
     public void add(int k) {
-        // TODO: Implement this method.
+        contains[k] = true;
+        size += 1;
     }
 
     /** Removes k from the set. */
     @Override
     public void remove(int k) {
-        // TODO: Implement this method.
+        contains[k] = false;
+        size -= 1;
     }
 
     /** Return true if k is in this set, false otherwise. */
@@ -41,14 +43,20 @@ public class BooleanSet implements SimpleSet {
     /** Returns the number of items in the set. */
     @Override
     public int size() {
-        // TODO: Implement this method.
-        return 0;
+        return this.size;
     }
 
     /** Returns an array containing all of the elements in this collection. */
     @Override
     public int[] toIntArray() {
-        // TODO: Implement this method.
-        return null;
+        int result[] = new int[size];
+        int index = 0;
+        for (int i = 0; i < contains.length; i++) {
+            if (contains[i]) {
+                result[index] = i;
+                index++;
+            }
+        }
+        return result;
     }
 }
