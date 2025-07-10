@@ -40,6 +40,8 @@ Compiling tests for Lab...
 - **Lower Memory & CPU Usage:**  
   VS Code provides a lightweight and responsive experience, making it ideal for systems with limited resources or when working inside containers.
 
+#### IntelliJ Support via JetBrains Gateway
+IntelliJ IDEA is also supported via JetBrains Gateway. The devcontainer includes the necessary plugins so you can connect and use IntelliJ remotely inside Docker, even though VS Code is the main editor by default.
 ### Java Runtime: GraalVM 24 vs OpenJDK 17
 
 - **GraalVM 24** is used as the Java runtime inside the container, instead of the standard OpenJDK 17.
