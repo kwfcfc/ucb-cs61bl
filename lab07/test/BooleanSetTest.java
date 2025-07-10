@@ -13,12 +13,14 @@ public class BooleanSetTest {
             assertWithMessage("aSet should contain " + i).that(aSet.contains(i));
         }
 
+        aSet.add(18);
         assertWithMessage("Size is not 50 after 50 calls to add").that(aSet.size()).isEqualTo(50);
         for (int i = 0; i < 100; i += 2) {
             aSet.remove(i);
             assertWithMessage("aSet should not contain " + i).that(!aSet.contains(i));;
         }
 
+        aSet.remove(23);
         assertWithMessage("aSet is not empty after removing all elements").that(aSet.isEmpty());
         assertWithMessage("Size is not zero after removing all elements").that(aSet.size()).isEqualTo(0);
     }
