@@ -54,5 +54,6 @@
     }
   },
   "postCreateCommand": "cd /workspaces && git clone https://github.com/cs61bl/library-su25",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
   "remoteUser": "vscode"
 }
