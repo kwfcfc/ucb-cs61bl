@@ -13,6 +13,9 @@
   },
   "customizations": {
     "jetbrains": {
+      "settings": {
+        "Git4Idea:app:Git-Application-Settings.use_credential_helper": true
+      },
       "plugins": [
         "edu.berkeley.cs61b.plugin",
         "com.aegamesi.java_visualizer.plugin"
