@@ -1,6 +1,5 @@
 import deque.Deque61B;
 import deque.LinkedListDeque61B;
-import jh61b.utils.Reflection;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -12,11 +11,12 @@ import static com.google.common.truth.Truth.assertWithMessage;
 /** Performs some basic linked list tests. */
 public class LinkedListDeque61BTest {
 
-    @Test
+
     /**
      * In this test, we have three different assert statements that verify that addFirst works
      * correctly.
      */
+    @Test
     public void addFirstTestBasic() {
         Deque61B<String> lld1 = new LinkedListDeque61B<>();
 
@@ -36,12 +36,13 @@ public class LinkedListDeque61BTest {
          */
     }
 
-    @Test
+
     /**
      * In this test, we use only one assertThat statement. IMO this test is just as good as
      * addFirstTestBasic. In other words, the tedious work of adding the extra assertThat statements
      * isn't worth it.
      */
+    @Test
     public void addLastTestBasic() {
         Deque61B<String> lld1 = new LinkedListDeque61B<>();
 
@@ -51,8 +52,9 @@ public class LinkedListDeque61BTest {
         assertThat(lld1.toList()).containsExactly("front", "middle", "back").inOrder();
     }
 
-    @Test
+
     /** This test performs interspersed addFirst and addLast calls. */
+    @Test
     public void addFirstAndAddLastTest() {
         Deque61B<Integer> lld1 = new LinkedListDeque61B<>();
 

@@ -59,13 +59,14 @@ public class LinkedListPreconditionTest {
                 try {
                     f.setAccessible(true);
                     Object node = f.get(lld);
-                    for (Field innerField : node.getClass().getDeclaredFields())
+                    for (Field innerField : node.getClass().getDeclaredFields()) {
                         if (innerField.getType().equals(Object.class)) { // value field
                             innerField.setAccessible(true);
                             assertWithMessage("Value field of node should be generic")
                                     .that(innerField.getGenericType())
                                     .isNotEqualTo(Object.class);
                         }
+                    }
                 } catch (IllegalAccessException e) {
                     fail(e.getMessage());
                 }
@@ -114,6 +115,7 @@ public class LinkedListPreconditionTest {
     public void noNonTrivialConstructorsTest() {
         Constructor<?>[] ctors = LinkedListDeque61B.class.getConstructors();
         assertWithMessage("Found more than one constructor in LinkedListDeque61B").that(ctors).hasLength(1);
-        assertWithMessage("LinkedListDeque61B constructor has more than zero arguments").that(ctors[0].getParameterCount()).isEqualTo(0);
+        assertWithMessage("LinkedListDeque61B constructor has more than zero arguments").that(ctors[0].
+                getParameterCount()).isEqualTo(0);
     }
 }

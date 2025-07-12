@@ -34,7 +34,7 @@ public class ArrayDeque61B<T> implements Deque61B<T> {
         T[] oldArray = array;
         int oldHead = head;
 
-        capacity = up? capacity << 1: capacity >> 1;
+        capacity = up ? capacity << 1 : capacity >> 1;
         array = (T[]) new Object[capacity];
         head = (oldCapacity >> 1) - 1;
 
@@ -45,15 +45,19 @@ public class ArrayDeque61B<T> implements Deque61B<T> {
         }
     }
 
-    private void resizeUp() { resize(true); }
+    private void resizeUp() {
+        resize(true);
+    }
 
-    private void resizeDown() { resize(false); }
+    private void resizeDown() {
+        resize(false);
+    }
 
     private void add(T x, boolean front) {
         if (size >= capacity) {
             resizeUp();
         }
-        int pointer = front? this.head : this.tail;
+        int pointer = front ? this.head : this.tail;
         array[pointer] = x;
         if (front) {
             head = (pointer - 1) & (capacity - 1); // this is the bitwise floor mod and works with -1 too.
@@ -70,7 +74,7 @@ public class ArrayDeque61B<T> implements Deque61B<T> {
         if (capacity >= RESIZING_THRESHOLD && size * USAGE_FACTOR <= capacity) {
             resizeDown();
         }
-        int pointer = front? this.head + 1 : this.tail - 1;
+        int pointer = front ? this.head + 1 : this.tail - 1;
         pointer = pointer & (capacity - 1);
         if (front) {
             head = pointer;
@@ -82,10 +86,14 @@ public class ArrayDeque61B<T> implements Deque61B<T> {
     }
 
     @Override
-    public void addFirst(T x) { add(x, true); }
+    public void addFirst(T x) {
+        add(x, true);
+    }
 
     @Override
-    public void addLast(T x) { add(x, false); }
+    public void addLast(T x) {
+        add(x, false);
+    }
 
     @Override
     public List<T> toList() {
@@ -108,10 +116,14 @@ public class ArrayDeque61B<T> implements Deque61B<T> {
     }
 
     @Override
-    public T removeFirst() { return remove(true); }
+    public T removeFirst() {
+        return remove(true);
+    }
 
     @Override
-    public T removeLast() { return remove(false); }
+    public T removeLast() {
+        return remove(false);
+    }
 
     @Override
     public T get(int index) {

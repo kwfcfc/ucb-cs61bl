@@ -6,8 +6,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import static com.google.common.truth.Truth.assertThat;
@@ -104,7 +102,7 @@ public class ArrayDeque61BTest {
     @DisplayName("ArrayDeque61B has constant time add and proper resize")
     void addFirstAndAddLastWithResize() {
         Deque61B<Integer> test = new ArrayDeque61B<>();
-        for (int i = -24; i <=24; i += 3) {
+        for (int i = -24; i <= 24; i += 3) {
             test.addFirst(i);
         }
         assertWithMessage("List size not correct after add First").that(test.size()).isEqualTo(17);
@@ -117,13 +115,13 @@ public class ArrayDeque61BTest {
         assertWithMessage("List size not correct after removal").that(test.size()).isEqualTo(7);
         assertWithMessage("List of Deque not correct").that(test.toList()).containsExactly(9, 6, 3, 0, -3, -6, -9).inOrder();
 
-        for (int i = 5; i < 85; i += 5 ) {
+        for (int i = 5; i < 85; i += 5) {
             test.addLast(i);
         }
 
         assertWithMessage("List size not correct after add Last").that(test.size()).isEqualTo(23);
 
-        for (int i = 0; i < 9; i++ ) {
+        for (int i = 0; i < 9; i++) {
             test.removeLast();
             test.removeFirst();
         }
@@ -187,7 +185,7 @@ public class ArrayDeque61BTest {
         ald1.addFirst(3);
 
         assertThat(ald1).isNotEqualTo(ald2);
-        assertThat(ald1).isNotEqualTo(List.of(1,2,3));
+        assertThat(ald1).isNotEqualTo(List.of(1, 2, 3));
     }
 
     @Test
