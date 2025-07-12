@@ -31,16 +31,20 @@ public class ArrayDeque61B<T> implements Deque61B<T> {
 
     private void resize(boolean up) {
         int oldCapacity = capacity;
-        T[] oldArray = array;
         int oldHead = head;
+        T[] oldArray = array;
+
 
         capacity = up ? capacity << 1 : capacity >> 1;
+        // if resizing up, put the head in the 1/4 position so the array starts from 1/4 to 3/4.
+        // if resizing down, put the head
+        head = up ? (oldCapacity >> 1) - 1: (capacity >> 2) - 1;
+        tail = head + 1 + size;
         array = (T[]) new Object[capacity];
-        head = (oldCapacity >> 1) - 1;
 
         for (int i = 0; i < size; i++) {
             int oldIndex = (oldHead + 1 + i) & (oldCapacity - 1);
-            int index = (head + 1 + i) & (capacity - 1);
+            int index = head + 1 + i;
             array[index] = oldArray[oldIndex];
         }
     }
@@ -74,11 +78,12 @@ public class ArrayDeque61B<T> implements Deque61B<T> {
         if (capacity >= RESIZING_THRESHOLD && size * USAGE_FACTOR <= capacity) {
             resizeDown();
         }
-        int pointer = front ? this.head + 1 : this.tail - 1;
-        pointer = pointer & (capacity - 1);
+        int pointer = front ? this.head : this.tail;
         if (front) {
+            pointer = (pointer + 1) & (capacity - 1);
             head = pointer;
         } else {
+            pointer = (pointer - 1) & (capacity - 1);
             tail = pointer;
         }
         size--;

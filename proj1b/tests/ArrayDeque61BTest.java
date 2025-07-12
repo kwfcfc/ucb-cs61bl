@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
+import java.util.Iterator;
 import java.util.List;
 
 import static com.google.common.truth.Truth.assertThat;
@@ -159,6 +160,28 @@ public class ArrayDeque61BTest {
         lld2.addLast(6.9);
         lld2.addFirst(3.48);
         assertThat(lld2).containsExactly(3.48, 0.0, 6.9).inOrder();
+    }
+
+    @Test
+    @DisplayName("Deque61B implements multiple iterators")
+    void multipleIteratorTest() {
+        Deque61B<String> ald = new ArrayDeque61B<>();
+
+        ald.addLast("a");
+        ald.addFirst("j");
+        ald.addLast("m"); // [j,a,m]
+
+        Iterator<String> it = ald.iterator();
+        it.next();
+        it.next();
+
+        for (String c: ald) {
+            if (it.hasNext()) {
+                assertThat(it.next()).isEqualTo("m");
+                continue;
+            }
+            assertThat(ald.size()).isEqualTo(3);
+        }
     }
 
     @Test
