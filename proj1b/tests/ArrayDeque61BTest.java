@@ -26,8 +26,14 @@ public class ArrayDeque61BTest {
     @DisplayName("ArrayDeque61B has constant time add")
     void addFirstAndAddLast() {
         Deque61B<Integer> test = new ArrayDeque61B<>();
+        assertThat(test.toList()).isEmpty();
+
         test.addLast(1); // [1]
         assertWithMessage("List size not correct").that(test.size()).isEqualTo(1);
+
+        assertThat(test.removeFirst()).isEqualTo(1);
+
+        test.addFirst(1);
 
         test.addFirst(7); // [7,1]
         test.addLast(8); // [7,1,8]
@@ -94,8 +100,10 @@ public class ArrayDeque61BTest {
         assertWithMessage("list should be not empty").that(test.isEmpty()).isFalse();
         test.removeLast();
         assertWithMessage("list should be empty").that(test.isEmpty()).isTrue();
+        assertThat(test.size()).isEqualTo(0);
         assertWithMessage("remove last empty list not correct").that(test.removeLast()).isNull();
         assertWithMessage("remove first empty list not correct").that(test.removeFirst()).isNull();
+        assertThat(test.size()).isEqualTo(0);
     }
 
     @Test
