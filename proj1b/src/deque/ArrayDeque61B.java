@@ -38,7 +38,7 @@ public class ArrayDeque61B<T> implements Deque61B<T> {
         capacity = up ? capacity << 1 : capacity >> 1;
         // if resizing up, put the head in the 1/4 position so the array starts from 1/4 to 3/4.
         // if resizing down, put the head
-        head = up ? (oldCapacity >> 1) - 1: (capacity >> 2) - 1;
+        head = up ? (oldCapacity >> 1) - 1 : (capacity >> 2) - 1;
         tail = head + 1 + size;
         array = (T[]) new Object[capacity];
 
