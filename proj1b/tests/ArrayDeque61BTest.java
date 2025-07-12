@@ -1,6 +1,6 @@
 import deque.ArrayDeque61B;
-
 import deque.Deque61B;
+import deque.LinkedListDeque61B;
 import jh61b.utils.Reflection;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
 
 public class ArrayDeque61BTest {
@@ -108,5 +109,22 @@ public class ArrayDeque61BTest {
         }
 
         assertWithMessage("List size not correct after second removal").that(test.size()).isEqualTo(5);
+    }
+
+    @Test
+    @DisplayName("Deque61B implements iterator")
+    void iteratorTest() {
+        Deque61B<String> lld = new LinkedListDeque61B<>();
+
+        lld.addLast("a");
+        lld.addFirst("j");
+        lld.addLast("m");
+        assertThat(lld).containsExactly("j", "a", "m").inOrder();
+
+        Deque61B<Double> lld2 = new ArrayDeque61B<>();
+        lld2.addLast(0.0);
+        lld2.addLast(6.9);
+        lld2.addFirst(3.48);
+        assertThat(lld2).containsExactly(3.48, 0.0, 6.9).inOrder();
     }
 }

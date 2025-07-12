@@ -1,6 +1,9 @@
 package deque;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
+
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class ArrayDeque61B<T> implements Deque61B<T> {
@@ -46,25 +49,43 @@ public class ArrayDeque61B<T> implements Deque61B<T> {
 
     private void resizeDown() { resize(false); }
 
-    @Override
-    public void addFirst(T x) {
+    private void add(T x, boolean front) {
         if (size >= capacity) {
             resizeUp();
         }
-        array[head] = x;
-        head = (head - 1) & (capacity - 1); // this is the bitwise floor mod and works with -1 too.
+        int pointer = front? this.head : this.tail;
+        array[pointer] = x;
+        if (front) {
+            head = (pointer - 1) & (capacity - 1); // this is the bitwise floor mod and works with -1 too.
+        } else {
+            tail = (pointer + 1) & (capacity - 1);
+        }
         size++;
     }
 
-    @Override
-    public void addLast(T x) {
-        if (size >= capacity) {
-            resizeUp();
+    private T remove(boolean front) {
+        if (size == 0) {
+            return null;
         }
-        array[tail] = x;
-        tail =  (tail + 1) & (capacity - 1);
-        size++;
+        if (capacity >= RESIZING_THRESHOLD && size * USAGE_FACTOR <= capacity) {
+            resizeDown();
+        }
+        int pointer = front? this.head + 1 : this.tail - 1;
+        pointer = pointer & (capacity - 1);
+        if (front) {
+            head = pointer;
+        } else {
+            tail = pointer;
+        }
+        size--;
+        return array[pointer];
     }
+
+    @Override
+    public void addFirst(T x) { add(x, true); }
+
+    @Override
+    public void addLast(T x) { add(x, false); }
 
     @Override
     public List<T> toList() {
@@ -87,30 +108,10 @@ public class ArrayDeque61B<T> implements Deque61B<T> {
     }
 
     @Override
-    public T removeFirst() {
-        if (size == 0) {
-            return null;
-        }
-        if (capacity >= RESIZING_THRESHOLD && size * USAGE_FACTOR <= capacity) {
-            resizeDown();
-        }
-        head = (head + 1) & (capacity - 1);
-        size--;
-        return array[head];
-    }
+    public T removeFirst() { return remove(true); }
 
     @Override
-    public T removeLast() {
-        if (size == 0) {
-            return null;
-        }
-        if (capacity >= RESIZING_THRESHOLD && size * USAGE_FACTOR <= capacity) {
-            resizeDown();
-        }
-        tail = (tail - 1) & (capacity - 1);
-        size--;
-        return array[tail];
-    }
+    public T removeLast() { return remove(false); }
 
     @Override
     public T get(int index) {
@@ -124,5 +125,25 @@ public class ArrayDeque61B<T> implements Deque61B<T> {
     @Override
     public T getRecursive(int index) {
         return null;
+    }
+
+    private class ArrayIterator implements Iterator<T> {
+        private int index = head;
+
+        public boolean hasNext() {
+            int nextIndex = (index + 1) & (capacity - 1);
+            return nextIndex != tail;
+        }
+
+        public T next() {
+            index = (index + 1) & (capacity - 1);
+            return array[index];
+        }
+    }
+
+    @Override
+    @NonNull
+    public Iterator<T> iterator() {
+        return new ArrayIterator();
     }
 }
