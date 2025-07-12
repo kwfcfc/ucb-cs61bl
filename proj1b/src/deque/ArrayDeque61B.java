@@ -26,8 +26,25 @@ public class ArrayDeque61B<T> implements Deque61B<T> {
         array = (T[]) new Object[INITIAL_CAPACITY];
     }
 
-    private void resizeUp() {
+    private void resize(boolean up) {
+        int oldCapacity = capacity;
+        T[] oldArray = array;
+        int oldHead = head;
+
+        capacity = up? capacity << 1: capacity >> 1;
+        array = (T[]) new Object[capacity];
+        head = (oldCapacity >> 1) - 1;
+
+        for (int i = 0; i < size; i++) {
+            int oldIndex = (oldHead + 1 + i) & (oldCapacity - 1);
+            int index = (head + 1 + i) & (capacity - 1);
+            array[index] = oldArray[oldIndex];
+        }
     }
+
+    private void resizeUp() { resize(true); }
+
+    private void resizeDown() { resize(false); }
 
     @Override
     public void addFirst(T x) {
@@ -74,6 +91,9 @@ public class ArrayDeque61B<T> implements Deque61B<T> {
         if (size == 0) {
             return null;
         }
+        if (capacity >= RESIZING_THRESHOLD && size * USAGE_FACTOR <= capacity) {
+            resizeDown();
+        }
         head = (head + 1) & (capacity - 1);
         size--;
         return array[head];
@@ -83,6 +103,9 @@ public class ArrayDeque61B<T> implements Deque61B<T> {
     public T removeLast() {
         if (size == 0) {
             return null;
+        }
+        if (capacity >= RESIZING_THRESHOLD && size * USAGE_FACTOR <= capacity) {
+            resizeDown();
         }
         tail = (tail - 1) & (capacity - 1);
         size--;

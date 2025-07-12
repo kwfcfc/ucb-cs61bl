@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
 
 public class ArrayDeque61BTest {
@@ -25,7 +24,7 @@ public class ArrayDeque61BTest {
     @Test
     @DisplayName("ArrayDeque61B has constant time add")
     void addFirstAndAddLast() {
-        Deque61B<Integer> test = new ArrayDeque61B();
+        Deque61B<Integer> test = new ArrayDeque61B<>();
         test.addLast(1); // [1]
         assertWithMessage("List size not correct").that(test.size()).isEqualTo(1);
 
@@ -40,7 +39,7 @@ public class ArrayDeque61BTest {
     @Test
     @DisplayName("ArrayDeque61B has constant time get")
     void getTest1() {
-        Deque61B<String> test = new ArrayDeque61B();
+        Deque61B<String> test = new ArrayDeque61B<>();
         test.addLast("m"); // [m]
 
         test.addFirst("a"); // [a,m]
@@ -58,7 +57,7 @@ public class ArrayDeque61BTest {
     @Test
     @DisplayName("ArrayDeque61B has constant time remove first and remove last")
     void removeFirstAndRemoveLast() {
-        Deque61B<String> test = new ArrayDeque61B();
+        Deque61B<String> test = new ArrayDeque61B<>();
         test.addLast("m"); // [m]
 
         test.addFirst("a"); // [a,m]
@@ -77,6 +76,37 @@ public class ArrayDeque61BTest {
         test.removeLast();
         assertWithMessage("list should be empty").that(test.isEmpty()).isTrue();
         assertWithMessage("remove last empty list not correct").that(test.removeLast()).isNull();
-        assertWithMessage("remove first empty list not correct").that(test.removeLast()).isNull();
+        assertWithMessage("remove first empty list not correct").that(test.removeFirst()).isNull();
+    }
+
+    @Test
+    @DisplayName("ArrayDeque61B has constant time add and proper resize")
+    void addFirstAndAddLastWithResize() {
+        Deque61B<Integer> test = new ArrayDeque61B<>();
+        for (int i = -24; i <=24; i += 3) {
+            test.addFirst(i);
+        }
+        assertWithMessage("List size not correct after add First").that(test.size()).isEqualTo(17);
+
+        for (int i = 0; i < 5; i++) {
+            test.removeFirst();
+            test.removeLast();
+        }
+
+        assertWithMessage("List size not correct after removal").that(test.size()).isEqualTo(7);
+        assertWithMessage("List of Deque not correct").that(test.toList()).containsExactly(9, 6, 3, 0, -3, -6, -9).inOrder();
+
+        for (int i = 5; i < 85; i += 5 ) {
+            test.addLast(i);
+        }
+
+        assertWithMessage("List size not correct after add Last").that(test.size()).isEqualTo(23);
+
+        for (int i = 0; i < 9; i++ ) {
+            test.removeLast();
+            test.removeFirst();
+        }
+
+        assertWithMessage("List size not correct after second removal").that(test.size()).isEqualTo(5);
     }
 }
