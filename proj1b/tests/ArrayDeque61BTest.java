@@ -1,5 +1,6 @@
 import deque.ArrayDeque61B;
 
+import deque.Deque61B;
 import jh61b.utils.Reflection;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,7 +25,7 @@ public class ArrayDeque61BTest {
     @Test
     @DisplayName("ArrayDeque61B has constant time add")
     void addFirstAndAddLast() {
-        ArrayDeque61B<Integer> test = new ArrayDeque61B();
+        Deque61B<Integer> test = new ArrayDeque61B();
         test.addLast(1); // [1]
         assertWithMessage("List size not correct").that(test.size()).isEqualTo(1);
 
@@ -39,7 +40,7 @@ public class ArrayDeque61BTest {
     @Test
     @DisplayName("ArrayDeque61B has constant time get")
     void getTest1() {
-        ArrayDeque61B<String> test = new ArrayDeque61B();
+        Deque61B<String> test = new ArrayDeque61B();
         test.addLast("m"); // [m]
 
         test.addFirst("a"); // [a,m]
@@ -52,5 +53,30 @@ public class ArrayDeque61BTest {
         assertWithMessage("Get element 3 not correct").that(test.get(3)).isEqualTo("g");
         assertWithMessage("Get negative index should be null").that(test.get(-3)).isNull();
         assertWithMessage("Get out of bound index should be null").that(test.get(7)).isNull();
+    }
+
+    @Test
+    @DisplayName("ArrayDeque61B has constant time remove first and remove last")
+    void removeFirstAndRemoveLast() {
+        Deque61B<String> test = new ArrayDeque61B();
+        test.addLast("m"); // [m]
+
+        test.addFirst("a"); // [a,m]
+        test.addLast("g"); // [a,m,g]
+        test.addLast("e"); // [a,m,g,e]
+        test.addFirst("E"); // [E,a,m,g,e]
+
+        assertWithMessage("List size not correct").that(test.size()).isEqualTo(5);
+        assertWithMessage("remove first not correct").that(test.removeFirst()).isEqualTo("E");
+        assertWithMessage("remove first size not correct").that(test.size()).isEqualTo(4);
+        test.removeFirst();
+        test.removeFirst();
+        assertWithMessage("remove last not correct").that(test.removeLast()).isEqualTo("e");
+        assertWithMessage("remove last size not correct").that(test.size()).isEqualTo(1);
+        assertWithMessage("list should be not empty").that(test.isEmpty()).isFalse();
+        test.removeLast();
+        assertWithMessage("list should be empty").that(test.isEmpty()).isTrue();
+        assertWithMessage("remove last empty list not correct").that(test.removeLast()).isNull();
+        assertWithMessage("remove first empty list not correct").that(test.removeLast()).isNull();
     }
 }

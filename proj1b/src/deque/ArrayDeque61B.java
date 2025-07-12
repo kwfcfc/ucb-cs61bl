@@ -20,7 +20,7 @@ public class ArrayDeque61B<T> implements Deque61B<T> {
         // and addLast operations.
         head = (INITIAL_CAPACITY >> 1) - 1;
         // tail is the position of the next element that add Last.
-        tail = head;
+        tail = head + 1;
         size = 0;
         capacity = INITIAL_CAPACITY;
         array = (T[]) new Object[INITIAL_CAPACITY];
@@ -44,8 +44,8 @@ public class ArrayDeque61B<T> implements Deque61B<T> {
         if (size >= capacity) {
             resizeUp();
         }
-        tail =  (tail + 1) & (capacity - 1);
         array[tail] = x;
+        tail =  (tail + 1) & (capacity - 1);
         size++;
     }
 
@@ -61,7 +61,7 @@ public class ArrayDeque61B<T> implements Deque61B<T> {
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return size == 0;
     }
 
     @Override
@@ -71,12 +71,22 @@ public class ArrayDeque61B<T> implements Deque61B<T> {
 
     @Override
     public T removeFirst() {
-        return null;
+        if (size == 0) {
+            return null;
+        }
+        head = (head + 1) & (capacity - 1);
+        size--;
+        return array[head];
     }
 
     @Override
     public T removeLast() {
-        return null;
+        if (size == 0) {
+            return null;
+        }
+        tail = (tail - 1) & (capacity - 1);
+        size--;
+        return array[tail];
     }
 
     @Override
