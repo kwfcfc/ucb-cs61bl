@@ -98,4 +98,13 @@ public interface Deque61B<T> extends Iterable<T> {
         }
         return true;
     }
+
+    /**
+     * This method is a helper method to implement toString for the classes
+     * @return String for the deque similar to {@code [1, 2, 3]}, if the list
+     * is empty, it's {@code []}
+     */
+    default String dequeToString() {
+        return toList().toString();
+    }
 }

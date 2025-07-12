@@ -189,4 +189,26 @@ public class ArrayDeque61BTest {
         assertThat(ald1).isNotEqualTo(ald2);
         assertThat(ald1).isNotEqualTo(List.of(1,2,3));
     }
+
+    @Test
+    @DisplayName("Deque61B has correct toString")
+    void toStringTest() {
+        Deque61B<Integer> ald1 = new ArrayDeque61B<>();
+        Deque61B<Double> lld1 = new LinkedListDeque61B<>();
+
+        assertThat(ald1.toString()).isEqualTo("[]");
+        assertThat(lld1.toString()).isEqualTo(ald1.toString());
+
+        ald1.addLast(1);
+        ald1.addFirst(3);
+        ald1.addLast(2);
+        assertThat(ald1.toString()).isEqualTo("[3, 1, 2]");
+
+        lld1.addFirst(3.0);
+        assertThat(lld1.toString()).isEqualTo("[3.0]");
+
+        lld1.addLast(1.5);
+        lld1.addLast(-4.67);
+        assertThat(lld1.toString()).isEqualTo("[3.0, 1.5, -4.67]");
+    }
 }
