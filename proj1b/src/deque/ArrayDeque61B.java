@@ -11,12 +11,16 @@ public class ArrayDeque61B<T> implements Deque61B<T> {
     private int head;
     private int tail;
     private int capacity;
+    // if we only set capacity to the power of 2, it is easier to implement the floor mod in bitwise operation
     private int size;
     private T[] array;
 
     public ArrayDeque61B() {
-        head = 0;
-        tail = 1;
+        // set the head to the half of the array, so it assumes the user will have relatively same amount of addFirst
+        // and addLast operations.
+        head = (INITIAL_CAPACITY >> 1) - 1;
+        // tail is the position of the next element that add Last.
+        tail = head;
         size = 0;
         capacity = INITIAL_CAPACITY;
         array = (T[]) new Object[INITIAL_CAPACITY];
@@ -31,7 +35,7 @@ public class ArrayDeque61B<T> implements Deque61B<T> {
             resizeUp();
         }
         array[head] = x;
-        head = Math.floorMod(head - 1, capacity);
+        head = (head - 1) & (capacity - 1); // this is the bitwise floor mod and works with -1 too.
         size++;
     }
 
@@ -40,21 +44,17 @@ public class ArrayDeque61B<T> implements Deque61B<T> {
         if (size >= capacity) {
             resizeUp();
         }
+        tail =  (tail + 1) & (capacity - 1);
         array[tail] = x;
-        tail =  Math.floorMod(tail + 1, capacity);
         size++;
     }
 
     @Override
     public List<T> toList() {
         List<T> list = new ArrayList<>(size);
-        int arrayStart = Math.floorMod(head + 1, capacity);
-        int arrayEnd = Math.floorMod(tail - 1, capacity);
-        for (int i = arrayStart; i < size + arrayStart && i < capacity; i++) {
-            list.add(array[i]);
-        }
-        for (int i = 0; i <= arrayEnd && i < arrayStart; i++) {
-            list.add(array[i]);
+        for (int i = 0; i < size; i++) {
+            int index = (head + 1 + i) & (capacity - 1);
+            list.add(array[index]);
         }
         return list;
     }
@@ -66,7 +66,7 @@ public class ArrayDeque61B<T> implements Deque61B<T> {
 
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override
@@ -81,7 +81,11 @@ public class ArrayDeque61B<T> implements Deque61B<T> {
 
     @Override
     public T get(int index) {
-        return null;
+        if (index < 0 || index >= size) {
+            return null;
+        }
+        int arrayIndex = (head + 1 + index) & (capacity - 1);
+        return array[arrayIndex];
     }
 
     @Override
