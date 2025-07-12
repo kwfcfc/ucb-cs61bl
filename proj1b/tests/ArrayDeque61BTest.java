@@ -31,7 +31,14 @@ public class ArrayDeque61BTest {
         test.addLast(1); // [1]
         assertWithMessage("List size not correct").that(test.size()).isEqualTo(1);
 
+        test.addFirst(7);
+        assertThat(test.removeFirst()).isEqualTo(7);
         assertThat(test.removeFirst()).isEqualTo(1);
+
+        test.addLast(2);
+        test.addLast(3);
+        assertThat(test.removeFirst()).isEqualTo(2);
+        assertThat(test.removeLast()).isEqualTo(3);
 
         test.addFirst(1);
 
