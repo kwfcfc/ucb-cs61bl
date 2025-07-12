@@ -1,5 +1,6 @@
 package deque;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -77,4 +78,24 @@ public interface Deque61B<T> extends Iterable<T> {
      * @return element at {@code index} in the deque
      */
     T getRecursive(int index);
+
+    /**
+     * This method is a helper method to implement equals for the actual equals
+     * in the implementation class so that they only need to compare the type.
+     * @param other the other Deque61B
+     * @return if other equals to the current one
+     */
+    default boolean dequeEquals(Deque61B<?> other) {
+        if (other.size() != size()) {
+            return false;
+        }
+        Iterator<T> iterator = iterator();
+        Iterator<?> otherIterator = other.iterator();
+        while (iterator.hasNext()) {
+            if (!iterator.next().equals(otherIterator.next())) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

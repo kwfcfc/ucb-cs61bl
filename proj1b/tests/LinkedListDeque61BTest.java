@@ -4,6 +4,8 @@ import jh61b.utils.Reflection;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
 
@@ -201,5 +203,23 @@ public class LinkedListDeque61BTest {
         lld1.addFirst(-7);
         lld1.addLast(13);
         lld1.addFirst(-13); // [-13, -7, 0, 7, 13]
+    }
+
+    @Test
+    @DisplayName("LinkedListDeque implements equal")
+    void equalTest() {
+        Deque61B<Integer> lld1 = new LinkedListDeque61B<>();
+        Deque61B<Integer> lld2 = new LinkedListDeque61B<>();
+        lld1.addLast(0);
+        lld1.addLast(1);
+
+        assertThat(lld1).isNotEqualTo(lld2);
+
+        lld2.addFirst(1);
+        lld2.addFirst(0);
+        assertThat(lld1).isEqualTo(lld2);
+        assertThat(lld1).isNotEqualTo(null);
+        assertThat(lld1).isNotEqualTo(List.of(0, 1));
+        assertThat(lld1).isEqualTo(lld1);
     }
 }

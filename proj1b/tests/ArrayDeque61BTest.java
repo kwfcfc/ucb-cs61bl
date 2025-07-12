@@ -6,6 +6,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import static com.google.common.truth.Truth.assertThat;
@@ -144,5 +146,47 @@ public class ArrayDeque61BTest {
         lld2.addLast(6.9);
         lld2.addFirst(3.48);
         assertThat(lld2).containsExactly(3.48, 0.0, 6.9).inOrder();
+    }
+
+    @Test
+    @DisplayName("Deque61B implements equal on different generic type")
+    void equalsTestDifferentType() {
+        Deque61B<Double> ald1 = new ArrayDeque61B<>();
+        Deque61B<Integer> ald2 = new ArrayDeque61B<>();
+        Deque61B<Integer> lld = new LinkedListDeque61B<>();
+        // because of the type erasure, they are actually the same
+        assertThat(ald1).isEqualTo(ald2);
+        ald1.addLast(0.0);
+        ald1.addLast(1.0);
+        ald1.addLast(2.0);
+
+        ald2.addLast(0);
+        ald2.addLast(1);
+        ald2.addLast(2);
+
+        assertThat(ald1).isNotEqualTo(ald2);
+
+        lld.addFirst(2);
+        lld.addFirst(1);
+        lld.addFirst(0);
+        assertThat(lld).isEqualTo(ald2);
+    }
+
+    @Test
+    @DisplayName("ArrayDeque implements equal")
+    void equalsTest() {
+        Deque61B<Integer> ald1 = new ArrayDeque61B<>();
+        Deque61B<Integer> ald2 = new ArrayDeque61B<>();
+
+        ald1.addLast(1);
+        ald1.addLast(2);
+        ald1.addLast(3);
+
+        ald2.addFirst(1);
+        ald2.addLast(2);
+        ald1.addFirst(3);
+
+        assertThat(ald1).isNotEqualTo(ald2);
+        assertThat(ald1).isNotEqualTo(List.of(1,2,3));
     }
 }

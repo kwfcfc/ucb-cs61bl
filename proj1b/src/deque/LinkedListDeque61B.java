@@ -165,4 +165,12 @@ public class LinkedListDeque61B<T> implements Deque61B<T> {
     public Iterator<T> iterator() {
         return new LinkedListIterator();
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other instanceof Deque61B<?> otherDeque) {
+            return dequeEquals(otherDeque);
+        }
+        return false;
+    }
 }
