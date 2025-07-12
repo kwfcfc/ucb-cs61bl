@@ -159,8 +159,8 @@ public class LinkedListDeque61BTest {
         lld1.addFirst(23.4);
         lld1.addFirst(-2.4);
 
-        assertWithMessage("get negative index should return null").that(lld1.get(-1)).isNull();
-        assertWithMessage("get out of bound index should return null").that(lld1.get(8)).isNull();
+        assertWithMessage("get negative index should return null").that(lld1.getRecursive(-1)).isNull();
+        assertWithMessage("get out of bound index should return null").that(lld1.getRecursive(8)).isNull();
         assertThat(lld1.getRecursive(2)).isEqualTo(7.3);
         assertThat(lld1.getRecursive(0)).isEqualTo(-2.4);
         assertThat(lld1.getRecursive(1)).isEqualTo(23.4);

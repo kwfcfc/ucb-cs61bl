@@ -124,7 +124,19 @@ public class ArrayDeque61B<T> implements Deque61B<T> {
 
     @Override
     public T getRecursive(int index) {
-        return null;
+        return getRecursiveHelper(new ArrayIterator(),  index);
+    }
+
+    private T getRecursiveHelper(Iterator<T> iterator, int index) {
+        if (index < 0 || index >= size) {
+            return null;
+        }
+        if (index == 0) {
+            return iterator.next();
+        } else {
+            iterator.next();
+            return getRecursiveHelper(iterator, index - 1);
+        }
     }
 
     private class ArrayIterator implements Iterator<T> {

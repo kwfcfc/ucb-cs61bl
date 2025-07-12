@@ -56,6 +56,24 @@ public class ArrayDeque61BTest {
     }
 
     @Test
+    @DisplayName("ArrayDeque61B has implements getRecursive correctly")
+    void getRecursiveTest1() {
+        Deque61B<String> test = new ArrayDeque61B<>();
+        test.addLast("m"); // [m]
+
+        test.addFirst("a"); // [a,m]
+        test.addLast("g"); // [a,m,g]
+        test.addLast("e"); // [a,m,g,e]
+        test.addFirst("E"); // [E,a,m,g,e]
+
+        assertWithMessage("List size not correct").that(test.size()).isEqualTo(5);
+        assertWithMessage("Get element 0 not correct").that(test.getRecursive(0)).isEqualTo("E");
+        assertWithMessage("Get element 3 not correct").that(test.getRecursive(3)).isEqualTo("g");
+        assertWithMessage("Get negative index should be null").that(test.getRecursive(-3)).isNull();
+        assertWithMessage("Get out of bound index should be null").that(test.getRecursive(7)).isNull();
+    }
+
+    @Test
     @DisplayName("ArrayDeque61B has constant time remove first and remove last")
     void removeFirstAndRemoveLast() {
         Deque61B<String> test = new ArrayDeque61B<>();
