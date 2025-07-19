@@ -21,6 +21,10 @@ Compiling tests for Lab...
 *** Fatal error during 'run'
 ```
 
+#### Update
+
+The autograder has been fixed now. 
+
 ## Repository Structure
 
 - **Branch-per-Lab/Project:**  
