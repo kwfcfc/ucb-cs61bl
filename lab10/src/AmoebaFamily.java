@@ -34,7 +34,9 @@ public class AmoebaFamily implements Iterable<AmoebaFamily.Amoeba> {
 
     /* Returns the longest name in this src.AmoebaFamily. */
     public String longestName() {
-        // TODO: YOUR CODE HERE
+        if (root != null) {
+            return root.longestNameHelper();
+        }
         return "";
     }
 
@@ -110,7 +112,17 @@ public class AmoebaFamily implements Iterable<AmoebaFamily.Amoeba> {
             return maxLengthSeen;
         }
 
-        // POSSIBLE HELPER FUNCTIONS HERE
+        /* Returns the longest name between this Amoeba and its children. */
+        public String longestNameHelper() {
+            String longestNameSeen = name;
+            for (Amoeba a : children) {
+                String childLongestName = a.longestNameHelper();
+                if (longestNameSeen.length() < childLongestName.length()) {
+                    longestNameSeen = childLongestName;
+                }
+            }
+            return longestNameSeen;
+        }
 
     }
 
