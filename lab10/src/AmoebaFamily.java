@@ -2,6 +2,8 @@ package src;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Stack;
 
 /* An src.AmoebaFamily is a tree, where nodes are Amoebas, each of which can have
    any number of children. */
@@ -61,7 +63,9 @@ public class AmoebaFamily implements Iterable<AmoebaFamily.Amoeba> {
         family.addChild("Marge", "Bill");
         family.addChild("Marge", "Hilary");
         System.out.println("Here's the family!");
-        // Optional TODO: use the iterator to print out the family!
+        for (Amoeba amoeba : family) {
+            System.out.println(amoeba);
+        }
     }
 
     /* An Amoeba is a node of an src.AmoebaFamily. */
@@ -131,21 +135,36 @@ public class AmoebaFamily implements Iterable<AmoebaFamily.Amoeba> {
        O(N) operations. */
     public class AmoebaDFSIterator implements Iterator<Amoeba> {
 
-        // Optional TODO: IMPLEMENT THE CLASS HERE
+        private Stack<Amoeba> dfs = new Stack<Amoeba>();
 
         /* AmoebaDFSIterator constructor. Sets up all of the initial information
            for the AmoebaDFSIterator. */
         public AmoebaDFSIterator() {
+            if (root != null) {
+                dfs.push(root);
+            }
         }
 
         /* Returns true if there is a next element to return. */
         public boolean hasNext() {
-            return false;
+            return !dfs.isEmpty();
         }
 
         /* Returns the next element. */
         public Amoeba next() {
-            return null;
+            if (!hasNext()) {
+                throw new NoSuchElementException("Amoeba family has no more elements");
+            }
+
+            Amoeba amoeba = dfs.pop();
+
+            if (!amoeba.getChildren().isEmpty()) {
+                for (Amoeba a : amoeba.getChildren().reversed()) {
+                    dfs.push(a);
+                }
+            }
+
+            return amoeba;
         }
 
         public void remove() {
