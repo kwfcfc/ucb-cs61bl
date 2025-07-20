@@ -59,7 +59,7 @@ public class BinaryTree<T> {
             return null;
         }
 
-        T rootItem = pre.getFirst();
+        T rootItem = pre.get(0);
         int inorderRoot = in.indexOf(rootItem);
 
         TreeNode<T> root = new TreeNode<>(rootItem);
