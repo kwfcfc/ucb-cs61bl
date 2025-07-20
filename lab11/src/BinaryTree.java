@@ -9,7 +9,8 @@ public class BinaryTree<T> {
         TreeNode<T> right;
 
         public TreeNode(T item) {
-            this.item = item; left = right = null;
+            this.item = item;
+            left = right = null;
         }
 
         public TreeNode(T item, TreeNode<T> left, TreeNode<T> right) {
@@ -157,15 +158,28 @@ public class BinaryTree<T> {
 
     /* Returns the height of the tree. */
     public int height() {
-        // TODO: YOUR CODE HERE
-        return 0;
+        if (root == null) {
+            return 0;
+        }
+        return heightHelper(root);
+    }
+
+    private int heightHelper(TreeNode<T> node) {
+        if (node == null) {
+            return 0;
+        }
+        return 1 + Math.max(heightHelper(node.left), heightHelper(node.right));
     }
 
     /* Returns true if the tree's left and right children are the same height
        and are themselves completely balanced. */
     public boolean isCompletelyBalanced() {
-        // TODO: YOUR CODE HERE
-        return false;
+        return isBalancedHelper(root);
+    }
+
+    private boolean isBalancedHelper(TreeNode<T> node) {
+        return node == null || heightHelper(node.getLeft()) == heightHelper(node.getRight())
+                && isBalancedHelper(node.getLeft()) && isBalancedHelper(node.getRight());
     }
 
     /* Returns a BinaryTree representing the Fibonacci calculation for N. */
