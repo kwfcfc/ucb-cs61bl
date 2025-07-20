@@ -6,19 +6,54 @@ public class BinarySearchTree<T extends Comparable<T>> extends BinaryTree<T> {
     }
 
     /* Creates a BST with root as ROOT. */
-    public BinarySearchTree(TreeNode root) {
+    public BinarySearchTree(TreeNode<T> root) {
         super(root);
     }
 
     /* Returns true if the BST contains the given KEY. */
     public boolean contains(T key) {
-        // TODO: YOUR CODE HERE: an extra helper method might be useful
-        return false;
+        return containsHelper(root, key);
+    }
+
+    private boolean containsHelper(TreeNode<T> root, T key) {
+        if (root == null) {
+            return false;
+        }
+        int compare = key.compareTo(root.getItem());
+        if (compare == 0) {
+            return true;
+        } else if (compare < 0) {
+            return containsHelper(root.getLeft(), key);
+        } else {
+            return containsHelper(root.getRight(), key);
+        }
     }
 
     /* Adds a node for KEY iff KEY isn't in the BST already. */
     public void add(T key) {
-        // TODO: YOUR CODE HERE: an extra helper method might be useful
+        if (root == null) {
+            root = new TreeNode<>(key);
+        } else {
+            addHelper(root, key);
+        }
+    }
+
+    private void addHelper(TreeNode<T> root, T key) {
+        int compare = key.compareTo(root.getItem());
+
+        if (compare < 0) {
+            if (root.left == null) {
+                root.left = new TreeNode<>(key);
+            } else  {
+                addHelper(root.getLeft(), key);
+            }
+        } else if (compare > 0) {
+            if (root.right == null) {
+                root.right = new TreeNode<>(key);
+            }  else  {
+                addHelper(root.getRight(), key);
+            }
+        }
     }
 
     /* Deletes a node from the BST. 

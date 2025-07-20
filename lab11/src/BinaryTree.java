@@ -117,7 +117,7 @@ public class BinaryTree<T> {
 
     /* Prints out the contents of a BinaryTree with a description in both
        preorder and inorder. */
-    static void print(BinaryTree t, String description) {
+    static void print(BinaryTree<?> t, String description) {
         System.out.println(description + " in preorder");
         t.printPreorder();
         System.out.println(description + " in inorder");
@@ -127,41 +127,41 @@ public class BinaryTree<T> {
 
     /* Fills this BinaryTree with values a, b, and c. DO NOT MODIFY. */
     public static BinaryTree<String> sampleTree1() {
-        TreeNode<String> root = new TreeNode("a",
-                new TreeNode("b"),
-                new TreeNode("c"));
+        TreeNode<String> root = new TreeNode<>("a",
+                new TreeNode<>("b"),
+                new TreeNode<>("c"));
         return new BinaryTree<>(root);
     }
 
     /* Fills this BinaryTree with values a, b, and c, d, e, f. DO NOT MODIFY. */
     public static BinaryTree<String> sampleTree2() {
-        TreeNode root = new TreeNode("a",
-                new TreeNode("b",
-                        new TreeNode("d",
-                                new TreeNode("e"),
-                                new TreeNode("f")),
+        TreeNode<String> root = new TreeNode<>("a",
+                new TreeNode<>("b",
+                        new TreeNode<>("d",
+                                new TreeNode<>("e"),
+                                new TreeNode<>("f")),
                         null),
-                new TreeNode("c"));
+                new TreeNode<>("c"));
         return new BinaryTree<>(root);
     }
 
     /* Fills this BinaryTree with the values a, b, c, d, e, f. DO NOT MODIFY. */
     public static BinaryTree<String> sampleTree3() {
-        TreeNode<String> root = new TreeNode("a",
-                new TreeNode("b"),
-                new TreeNode("c",
-                        new TreeNode("d",
-                                new TreeNode("e"),
-                                new TreeNode("f")),
+        TreeNode<String> root = new TreeNode<>("a",
+                new TreeNode<>("b"),
+                new TreeNode<>("c",
+                        new TreeNode<>("d",
+                                new TreeNode<>("e"),
+                                new TreeNode<>("f")),
                         null));
         return new BinaryTree<>(root);
     }
 
     /* Fills this BinaryTree with the same leaf TreeNode. DO NOT MODIFY. */
     public static BinaryTree<String> sampleTree4() {
-        TreeNode<String> leafNode = new TreeNode("c");
-        TreeNode<String> root = new TreeNode("a", new TreeNode("b", leafNode, leafNode),
-                new TreeNode("d", leafNode, leafNode));
+        TreeNode<String> leafNode = new TreeNode<>("c");
+        TreeNode<String> root = new TreeNode<>("a", new TreeNode<>("b", leafNode, leafNode),
+                new TreeNode<>("d", leafNode, leafNode));
         return new BinaryTree<>(root);
     }
 
@@ -207,7 +207,7 @@ public class BinaryTree<T> {
 
     /* Returns a BinaryTree representing the Fibonacci calculation for N. */
     public static BinaryTree<Integer> fibTree(int N) {
-        BinaryTree<Integer> result = new BinaryTree<Integer>();
+        BinaryTree<Integer> result = new BinaryTree<>();
 
         if (N < 0) {
             return result;
