@@ -46,11 +46,15 @@ public class RedBlackTree<T extends Comparable<T>> {
         }
 
         if (r.getItemCount() == 1) {
-            // TODO: Replace with code to create a 2-node equivalent
-            return null;
+           RBTreeNode<T> leftChild = buildRedBlackTree(r.getChildAt(0));
+           RBTreeNode<T> rightChild = buildRedBlackTree(r.getChildAt(1));
+            return new RBTreeNode<>(true, r.getItemAt(0), leftChild, rightChild);
         } else {
-            // TODO: Replace with code to create a 3-node equivalent
-            return null;
+            RBTreeNode<T> leftChild = buildRedBlackTree(r.getChildAt(0));
+            RBTreeNode<T> middleChild = buildRedBlackTree(r.getChildAt(1));
+            RBTreeNode<T> rightChild = buildRedBlackTree(r.getChildAt(2));
+            RBTreeNode<T> redLeft = new RBTreeNode<>(false, r.getItemAt(0), leftChild, middleChild);
+            return new RBTreeNode<>(true, r.getItemAt(1), redLeft, rightChild);
         }
     }
 
