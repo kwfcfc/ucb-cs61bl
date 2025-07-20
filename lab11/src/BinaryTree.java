@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 
 public class BinaryTree<T> {
 
@@ -49,7 +50,29 @@ public class BinaryTree<T> {
     }
 
     /** Optional constructor, see optional exercise in lab (or last week's theoretical lab). */
-    public BinaryTree(ArrayList<T> pre, ArrayList<T> in) { }
+    public BinaryTree(ArrayList<T> pre, ArrayList<T> in) {
+        root = TreeNodeHelper(pre, in);
+    }
+
+    private TreeNode<T> TreeNodeHelper(List<T> pre, List<T> in) {
+        if (pre.isEmpty() || in.isEmpty()) {
+            return null;
+        }
+
+        T rootItem = pre.getFirst();
+        int inorderRoot = in.indexOf(rootItem);
+
+        TreeNode<T> root = new TreeNode<>(rootItem);
+
+        List<T> leftPre = pre.subList(1, inorderRoot + 1);
+        List<T> rightPre = pre.subList(inorderRoot + 1, pre.size());
+        List<T> leftIn = in.subList(0, inorderRoot);
+        List<T> rightIn = in.subList(inorderRoot + 1, in.size());
+
+        root.left = TreeNodeHelper(leftPre, leftIn);
+        root.right = TreeNodeHelper(rightPre, rightIn);
+        return root;
+    }
 
     /* Print the values in the tree in preorder. */
     public void printPreorder() {
