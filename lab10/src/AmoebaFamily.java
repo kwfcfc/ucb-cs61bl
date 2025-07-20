@@ -1,9 +1,6 @@
 package src;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Stack;
+import java.util.*;
 
 /* An src.AmoebaFamily is a tree, where nodes are Amoebas, each of which can have
    any number of children. */
@@ -44,7 +41,8 @@ public class AmoebaFamily implements Iterable<AmoebaFamily.Amoeba> {
 
     /* Returns an Iterator for this src.AmoebaFamily. */
     public Iterator<Amoeba> iterator() {
-        return new AmoebaDFSIterator();
+        // return new AmoebaDFSIterator();
+        return new AmoebaBFSIterator();
     }
 
     /* Creates a new src.AmoebaFamily and prints it out. */
@@ -177,21 +175,32 @@ public class AmoebaFamily implements Iterable<AmoebaFamily.Amoeba> {
        O(N) operations. */
     public class AmoebaBFSIterator implements Iterator<Amoeba> {
 
-        // Optional TODO: IMPLEMENT THE CLASS HERE
+        private Queue<Amoeba> bfs = new LinkedList<Amoeba>();
 
         /* AmoebaBFSIterator constructor. Sets up all of the initial information
            for the AmoebaBFSIterator. */
         public AmoebaBFSIterator() {
+            if (root != null) {
+                bfs.add(root);
+            }
         }
 
         /* Returns true if there is a next element to return. */
         public boolean hasNext() {
-            return false;
+            return !bfs.isEmpty();
         }
 
         /* Returns the next element. */
         public Amoeba next() {
-            return null;
+            if  (!hasNext()) {
+                throw new NoSuchElementException("Amoeba family has no more elements");
+            }
+
+            Amoeba amoeba = bfs.remove();
+
+            bfs.addAll(amoeba.getChildren());
+
+            return amoeba;
         }
 
         public void remove() {
