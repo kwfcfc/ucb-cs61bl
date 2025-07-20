@@ -185,7 +185,29 @@ public class BinaryTree<T> {
     /* Returns a BinaryTree representing the Fibonacci calculation for N. */
     public static BinaryTree<Integer> fibTree(int N) {
         BinaryTree<Integer> result = new BinaryTree<Integer>();
-        // TODO: YOUR CODE HERE
-        return null;
+
+        if (N < 0) {
+            return result;
+        } else if (N == 0) {
+            result.root = new TreeNode<>(0);
+            return result;
+        } else if (N == 1) {
+            result.root = new TreeNode<>(1);
+            return result;
+        }
+
+        TreeNode<Integer> helper = new TreeNode<>(0);
+        TreeNode<Integer> head = new TreeNode<>(1);
+
+        for (int i = 1; i < N; i++) {
+            int newVal = helper.getItem() + head.getItem();
+            TreeNode<Integer> newNode = new TreeNode<>(newVal);
+            newNode.left = head;
+            newNode.right = helper;
+            helper = head;
+            head = newNode;
+        }
+        result.root = head;
+        return result;
     }
 }
