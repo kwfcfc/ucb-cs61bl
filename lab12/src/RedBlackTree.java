@@ -46,8 +46,8 @@ public class RedBlackTree<T extends Comparable<T>> {
         }
 
         if (r.getItemCount() == 1) {
-           RBTreeNode<T> leftChild = buildRedBlackTree(r.getChildAt(0));
-           RBTreeNode<T> rightChild = buildRedBlackTree(r.getChildAt(1));
+            RBTreeNode<T> leftChild = buildRedBlackTree(r.getChildAt(0));
+            RBTreeNode<T> rightChild = buildRedBlackTree(r.getChildAt(1));
             return new RBTreeNode<>(true, r.getItemAt(0), leftChild, rightChild);
         } else {
             RBTreeNode<T> leftChild = buildRedBlackTree(r.getChildAt(0));
@@ -64,7 +64,13 @@ public class RedBlackTree<T extends Comparable<T>> {
      * @param node
      */
     void flipColors(RBTreeNode<T> node) {
-        // TODO: YOUR CODE HERE
+        node.isBlack = !node.isBlack;
+        if (node.left != null) {
+            node.left.isBlack = !node.left.isBlack;
+        }
+        if (node.right != null) {
+            node.right.isBlack = !node.right.isBlack;
+        }
     }
 
     /**
@@ -75,8 +81,10 @@ public class RedBlackTree<T extends Comparable<T>> {
      * @return
      */
     RBTreeNode<T> rotateRight(RBTreeNode<T> node) {
-        // TODO: YOUR CODE HERE
-        return null;
+        T oldItem = node.item;
+        RBTreeNode<T> oldLeft = node.left;
+        RBTreeNode<T> newRight = new RBTreeNode<>(oldLeft.isBlack, oldItem, oldLeft.right, node.right);
+        return new RBTreeNode<>(node.isBlack, oldLeft.item, oldLeft.left, newRight);
     }
 
     /**
@@ -87,8 +95,10 @@ public class RedBlackTree<T extends Comparable<T>> {
      * @return
      */
     RBTreeNode<T> rotateLeft(RBTreeNode<T> node) {
-        // TODO: YOUR CODE HERE
-        return null;
+        T oldItem = node.item;
+        RBTreeNode<T> oldRight = node.right;
+        RBTreeNode<T> newLeft = new RBTreeNode<>(oldRight.isBlack, oldItem, node.left, oldRight.left);
+        return new RBTreeNode<>(node.isBlack, oldRight.item, newLeft, oldRight.right);
     }
 
     /**
@@ -109,23 +119,33 @@ public class RedBlackTree<T extends Comparable<T>> {
      * @return
      */
     private RBTreeNode<T> insert(RBTreeNode<T> node, T item) {
-        // TODO: Insert (return) new red leaf node.
+        if (node == null) {
+            return new RBTreeNode<>(false, item, null, null);
+        }
 
-
-        // TODO: Handle normal binary search tree insertion. The below line may help.
         int comp = item.compareTo(node.item);
 
+        if (comp == 0) {
+            return node;
+        } else if (comp < 0) {
+            node.left = insert(node.left, item);
+        } else {
+            node.right = insert(node.right, item);
+        }
 
-        // TODO: Rotate left operation (handle "middle of three" and "right-leaning red" structures)
+        if (isRed(node.right) && !isRed(node.left)) {
+            node = rotateLeft(node);
+        }
 
+        if (isRed(node.left) && isRed(node.left.left)) {
+            node = rotateRight(node);
+        }
 
-        // TODO: Rotate right operation (handle "smallest of three" structure)
+        if (isRed(node.left) && isRed(node.right)) {
+            flipColors(node);
+        }
 
-
-        // TODO: Color flip (handle "largest of three" structure)
-
-
-        return null; // TODO: fix this return statement
+        return node;
     }
 
     /**
@@ -137,5 +157,4 @@ public class RedBlackTree<T extends Comparable<T>> {
     private boolean isRed(RBTreeNode<T> node) {
         return node != null && !node.isBlack;
     }
-
 }
