@@ -10,10 +10,8 @@ public class HashMap<K, V> implements Map61BL<K, V> {
     private int size;
     private final double loadFactor;
 
-    /* TODO: Instance variables here */
     private LinkedList<Entry<K, V>>[] buckets;
 
-    /* TODO: Constructors here */
     public HashMap() {
         capacity = INITIAL_CAPACITY;
         size = 0;
@@ -63,7 +61,6 @@ public class HashMap<K, V> implements Map61BL<K, V> {
         }
     }
 
-    /* TODO: Interface methods here */
     @Override
     public void clear() {
         capacity = INITIAL_CAPACITY;
@@ -116,7 +113,7 @@ public class HashMap<K, V> implements Map61BL<K, V> {
         int i = 0;
         while (iterator.hasNext()) {
             if (iterator.next().key.equals(key)) {
-                Entry<K,V> result = buckets[index].remove(i);
+                Entry<K, V> result = buckets[index].remove(i);
                 size--;
                 return result.value;
             }
