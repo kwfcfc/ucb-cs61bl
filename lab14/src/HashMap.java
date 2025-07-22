@@ -1,9 +1,10 @@
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 
 public class HashMap<K, V> implements Map61BL<K, V> {
-    private static int INITIAL_CAPACITY = 16;
-    private static double DEFAULT_LOAD_FACTOR = 0.75;
+    private static final int INITIAL_CAPACITY = 16;
+    private static final double DEFAULT_LOAD_FACTOR = 0.75;
 
     private int capacity;
     private int size;
@@ -40,6 +41,25 @@ public class HashMap<K, V> implements Map61BL<K, V> {
         buckets = (LinkedList<Entry<K, V>>[]) new LinkedList[INITIAL_CAPACITY];
         for (int i = 0; i < INITIAL_CAPACITY; i++) {
             buckets[i] = new LinkedList<>();
+        }
+    }
+
+    private void resizeUp() {
+        LinkedList<Entry<K, V>>[] oldBuckets = buckets;
+
+        capacity = capacity << 1;
+        buckets = (LinkedList<Entry<K, V>>[]) new LinkedList[capacity];
+
+        // new buckets
+        for (int i = 0; i < capacity; i++) {
+            buckets[i] = new LinkedList<>();
+        }
+
+        for (LinkedList<Entry<K, V>> bucket : oldBuckets) {
+            for (Entry<K, V> entry : bucket) {
+                int index = entry.key.hashCode() & (capacity - 1);
+                buckets[index].addLast(entry);
+            }
         }
     }
 
@@ -80,9 +100,13 @@ public class HashMap<K, V> implements Map61BL<K, V> {
                 return;
             }
         }
+        size++;
+        if ((double) size / capacity > loadFactor) {
+            resizeUp();
+            index = key.hashCode() & (capacity - 1);
+        }
         Entry<K, V> entry = new Entry<>(key, value);
         buckets[index].addLast(entry);
-        size++;
     }
 
     @Override
@@ -113,12 +137,13 @@ public class HashMap<K, V> implements Map61BL<K, V> {
 
     @Override
     public Iterator<K> iterator() {
-        throw new UnsupportedOperationException();
+        return new HashMapIterator();
     }
 
     public int capacity() {
         return capacity;
     }
+
     private static class Entry<K, V> {
 
         private K key;
@@ -145,6 +170,39 @@ public class HashMap<K, V> implements Map61BL<K, V> {
         @Override
         public int hashCode() {
             return super.hashCode();
+        }
+    }
+
+    private class HashMapIterator implements Iterator<K> {
+        private int bucketIndex = 0;
+        private Iterator<Entry<K, V>> bucketIterator = buckets[bucketIndex].iterator();
+
+        @Override
+        public boolean hasNext() {
+            if (bucketIterator.hasNext()) {
+                return true;
+            }
+            for (int i = bucketIndex + 1; i < capacity; i++) {
+                if (!buckets[i].isEmpty()) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public K next() {
+            if (bucketIterator.hasNext()) {
+                return bucketIterator.next().key;
+            }
+
+            for (bucketIndex += 1; bucketIndex < capacity; bucketIndex++) {
+                if (!buckets[bucketIndex].isEmpty()) {
+                    bucketIterator = buckets[bucketIndex].iterator();
+                    return bucketIterator.next().key;
+                }
+            }
+            throw new NoSuchElementException();
         }
     }
 }
