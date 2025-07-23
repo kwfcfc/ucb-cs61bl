@@ -157,6 +157,9 @@ public class MinHeap<E extends Comparable<E>> {
     /* Returns and removes the smallest element in the MinHeap, or null if there are none. */
     public E removeMin() {
         E result = getElement(1);
+        if (result == null) {
+            return null;
+        }
         swap(1, size);
         contents.remove(size);
         size--;
