@@ -47,10 +47,20 @@ public class UnionFind {
         }
         if (unionSet[v] < 0) {
             return v;
-        } else {
-            unionSet[v] = find(unionSet[v]);
-            return unionSet[v];
         }
+        int iterator = v;
+        while (unionSet[iterator] > 0) {
+            iterator = unionSet[iterator];
+        }
+        int result = iterator;
+        iterator = v;
+
+        while (unionSet[iterator] > 0) {
+            int parent = unionSet[iterator];
+            unionSet[iterator] = result;
+            iterator = parent;
+        }
+        return result;
     }
 
     /* Connects two items V1 and V2 together by connecting their respective
