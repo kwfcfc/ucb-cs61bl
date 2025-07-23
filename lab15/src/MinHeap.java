@@ -8,7 +8,6 @@ public class MinHeap<E extends Comparable<E>> {
     /* An ArrayList that stores the elements in this MinHeap. */
     private ArrayList<E> contents;
     private int size;
-    // TODO: YOUR CODE HERE (no code should be needed here if not implementing the more optimized version)
     private HashMap<E, Integer> table;
 
     /* Initializes an empty MinHeap. */
@@ -180,7 +179,7 @@ public class MinHeap<E extends Comparable<E>> {
         setElement(index, element);
 
         int parent = getParentOf(index);
-        if (index == min(index, parent)) {
+        if (index > 1 && index == min(index, parent)) { // root should not have parent
             bubbleUp(index);
             return;
         }
