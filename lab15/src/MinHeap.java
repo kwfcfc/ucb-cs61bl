@@ -12,6 +12,7 @@ public class MinHeap<E extends Comparable<E>> {
     public MinHeap() {
         contents = new ArrayList<>();
         contents.add(null);
+        size = 0;
     }
 
     /* Returns the element at index INDEX, and null if it is out of bounds. */
@@ -69,61 +70,85 @@ public class MinHeap<E extends Comparable<E>> {
 
     /* Returns the index of the left child of the element at index INDEX. */
     private int getLeftOf(int index) {
-        // TODO: YOUR CODE HERE
-        return -1;
+        return 2 * index;
     }
 
     /* Returns the index of the right child of the element at index INDEX. */
     private int getRightOf(int index) {
-        // TODO: YOUR CODE HERE
-        return -1;
+        return 2 * index + 1;
     }
 
     /* Returns the index of the parent of the element at index INDEX. */
     private int getParentOf(int index) {
-        // TODO: YOUR CODE HERE
-        return -1;
+        return index / 2;
     }
 
     /* Returns the index of the smaller element. At least one index has a
        non-null element. If the elements are equal, return either index. */
     private int min(int index1, int index2) {
-        // TODO: YOUR CODE HERE
-        return -1;
+        if (getElement(index1) == null) {
+            return index2;
+        }
+        if (getElement(index2) == null) {
+            return index1;
+        }
+
+        int compare = getElement(index1).compareTo(getElement(index2));
+        if (compare > 0) {
+            return index2;
+        } else {
+            return index1;
+        }
     }
 
     /* Returns but does not remove the smallest element in the MinHeap. */
     public E findMin() {
-        // TODO: YOUR CODE HERE
-        return null;
+        return getElement(1);
     }
 
     /* Bubbles up the element currently at index INDEX. */
     private void bubbleUp(int index) {
-        // TODO: YOUR CODE HERE
+        int iterator = index;
+        int parent = getParentOf(index);
+        while (iterator > 1 && getElement(iterator).compareTo(getElement(parent)) < 0) {
+            swap(iterator, parent);
+            iterator = parent;
+            parent = getParentOf(iterator);
+        }
     }
 
     /* Bubbles down the element currently at index INDEX. */
     private void bubbleDown(int index) {
-        // TODO: YOUR CODE HERE
+        int iterator = index;
+        int smaller = min(getLeftOf(index), getRightOf(index));
+        while (getElement(smaller) != null && getElement(iterator).compareTo(getElement(smaller)) > 0) {
+            swap(iterator, smaller);
+            iterator = smaller;
+            smaller = min(getLeftOf(index), getRightOf(index));
+        }
     }
 
     /* Returns the number of elements in the MinHeap. */
     public int size() {
-        // TODO: YOUR CODE HERE
-        return 0;
+        return size;
     }
 
     /* Inserts ELEMENT into the MinHeap. If ELEMENT is already in the MinHeap,
        throw an IllegalArgumentException.*/
     public void insert(E element) {
-        // TODO: YOUR CODE HERE
+        contents.add(element);
+        size++;
+        bubbleUp(size);
     }
 
     /* Returns and removes the smallest element in the MinHeap, or null if there are none. */
     public E removeMin() {
-        // TODO: YOUR CODE HERE
-        return null;
+        E result = getElement(1);
+        swap(1, size);
+        bubbleDown(1);
+        contents.remove(size);
+        size--;
+        return result;
     }
 
     /* Replaces and updates the position of ELEMENT inside the MinHeap, which
