@@ -40,8 +40,6 @@ public class MinHeapPQTest {
         assertThat(0).isEqualTo(pq.size());
     }
 
-    // TODO: add some of your own tests here!
-
     @Test
     public void heapAlphabetTest() {
         MinHeapPQ<Character> pq = new MinHeapPQ<>();

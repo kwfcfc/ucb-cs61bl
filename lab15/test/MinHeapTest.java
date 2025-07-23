@@ -87,11 +87,11 @@ public class MinHeapTest {
         assertThat(minHeap.contains(4)).isTrue();
     }
 
-    public class testPair<K extends Comparable<K>, V> implements Comparable<testPair<K, V>> {
+    public class TestPair<K extends Comparable<K>, V> implements Comparable<TestPair<K, V>> {
         K key;
         V value;
 
-        public testPair(K key, V value) {
+        public TestPair(K key, V value) {
             this.key = key;
             this.value = value;
         }
@@ -109,22 +109,24 @@ public class MinHeapTest {
         }
 
         @Override
-        public String toString() { return key.toString(); }
+        public String toString() {
+            return key.toString();
+        }
 
         @Override
-        public int compareTo(testPair<K, V> o) {
+        public int compareTo(TestPair<K, V> o) {
             return key.compareTo(o.getKey());
         }
     }
 
     @Test
     public void updateTest() {
-        MinHeap<testPair<Integer, String>> minHeap = new MinHeap<>();
+        MinHeap<TestPair<Integer, String>> minHeap = new MinHeap<>();
 
-        testPair<Integer, String> pairMonth = new testPair<>(6, "June");
-        testPair<Integer, String> pairDay = new testPair<>(4, "four");
-        testPair<Integer, String> pairWeek = new testPair<>(3, "three");
-        testPair<Integer, String> pairYear = new testPair<>(1, "1998");
+        TestPair<Integer, String> pairMonth = new TestPair<>(6, "June");
+        TestPair<Integer, String> pairDay = new TestPair<>(4, "four");
+        TestPair<Integer, String> pairWeek = new TestPair<>(3, "three");
+        TestPair<Integer, String> pairYear = new TestPair<>(1, "1998");
 
         minHeap.insert(pairMonth);
         minHeap.insert(pairDay);
