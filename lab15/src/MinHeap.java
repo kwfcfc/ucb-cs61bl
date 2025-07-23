@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.NoSuchElementException;
 
 /* A MinHeap class of Comparable elements backed by an ArrayList. */
 public class MinHeap<E extends Comparable<E>> {
@@ -7,12 +9,14 @@ public class MinHeap<E extends Comparable<E>> {
     private ArrayList<E> contents;
     private int size;
     // TODO: YOUR CODE HERE (no code should be needed here if not implementing the more optimized version)
+    private HashMap<E, Integer> table;
 
     /* Initializes an empty MinHeap. */
     public MinHeap() {
         contents = new ArrayList<>();
         contents.add(null);
         size = 0;
+        table = new HashMap<>();
     }
 
     /* Returns the element at index INDEX, and null if it is out of bounds. */
@@ -31,6 +35,7 @@ public class MinHeap<E extends Comparable<E>> {
             contents.add(null);
         }
         contents.set(index, element);
+        table.put(element, index);
     }
 
     /* Swaps the elements at the two indices. */
@@ -112,8 +117,12 @@ public class MinHeap<E extends Comparable<E>> {
         int parent = getParentOf(index);
         while (iterator > 1 && getElement(iterator).compareTo(getElement(parent)) < 0) {
             swap(iterator, parent);
+            table.replace(getElement(parent), iterator);
             iterator = parent;
             parent = getParentOf(iterator);
+        }
+        if (iterator != index) {
+            table.replace(getElement(iterator), iterator);
         }
     }
 
@@ -123,8 +132,12 @@ public class MinHeap<E extends Comparable<E>> {
         int smaller = min(getLeftOf(index), getRightOf(index));
         while (getElement(smaller) != null && getElement(iterator).compareTo(getElement(smaller)) > 0) {
             swap(iterator, smaller);
+            table.replace(getElement(smaller),  iterator); // update the index hashtable for smaller child
             iterator = smaller;
-            smaller = min(getLeftOf(index), getRightOf(index));
+            smaller = min(getLeftOf(iterator), getRightOf(iterator));
+        }
+        if (index != iterator) {
+            table.replace(getElement(iterator), iterator);
         }
     }
 
@@ -136,8 +149,8 @@ public class MinHeap<E extends Comparable<E>> {
     /* Inserts ELEMENT into the MinHeap. If ELEMENT is already in the MinHeap,
        throw an IllegalArgumentException.*/
     public void insert(E element) {
-        contents.add(element);
         size++;
+        setElement(size, element);
         bubbleUp(size);
     }
 
@@ -145,9 +158,10 @@ public class MinHeap<E extends Comparable<E>> {
     public E removeMin() {
         E result = getElement(1);
         swap(1, size);
-        bubbleDown(1);
         contents.remove(size);
         size--;
+        bubbleDown(1);
+        table.remove(result);
         return result;
     }
 
@@ -156,18 +170,27 @@ public class MinHeap<E extends Comparable<E>> {
        not exist in the MinHeap, throw a NoSuchElementException. Item equality
        should be checked using .equals(), not ==. */
     public void update(E element) {
-        // TODO: OPTIONAL
+        if (!table.containsKey(element)) {
+            throw new NoSuchElementException();
+        }
+        int index = table.get(element);
+        setElement(index, element);
+
+        int parent = getParentOf(index);
+        if (index == min(index, parent)) {
+            bubbleUp(index);
+            return;
+        }
+
+        int minChild = min(getLeftOf(index), getRightOf(index));
+        if (index != min(index, minChild)) {
+            bubbleDown(index);
+        }
     }
 
     /* Returns true if ELEMENT is contained in the MinHeap. Item equality should
        be checked using .equals(), not ==. */
     public boolean contains(E element) {
-        // OPTIONAL: OPTIMIZE THE SPEED OF THIS TO MAKE IT CONSTANT
-        for (int i = 1; i < contents.size(); i++) {
-            if (element.equals(contents.get(i))) {
-                return true;
-            }
-        }
-        return false;
+        return table.containsKey(element);
     }
 }
