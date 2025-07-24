@@ -1,6 +1,9 @@
 package ngrams;
 
+import edu.princeton.cs.algs4.In;
+
 import java.util.Collection;
+import java.util.HashMap;
 
 import static ngrams.TimeSeries.MAX_YEAR;
 import static ngrams.TimeSeries.MIN_YEAR;
@@ -17,13 +20,18 @@ import static ngrams.TimeSeries.MIN_YEAR;
  */
 public class NGramMap {
 
-    // TODO: Add any necessary static/instance variables.
+    private HashMap<String, TimeSeries> wordTimeSeries;
+    private TimeSeries yearCount;
 
     /**
      * Constructs an NGramMap from WORDSFILENAME and COUNTSFILENAME.
      */
     public NGramMap(String wordsFilename, String countsFilename) {
-        // TODO: Fill in this constructor. See the "NGramMap Tips" section of the spec for help.
+        In wordsIn = new In(wordsFilename);
+        In countsIn = new In(countsFilename);
+
+        yearCount = getYearCounts(countsIn);
+        wordTimeSeries = getWordTimeSeries(wordsIn);
     }
 
     /**
@@ -34,8 +42,7 @@ public class NGramMap {
      * returns an empty TimeSeries.
      */
     public TimeSeries countHistory(String word, int startYear, int endYear) {
-        // TODO: Fill in this method.
-        return null;
+        return new TimeSeries(wordTimeSeries.get(word), startYear, endYear);
     }
 
     /**
@@ -45,16 +52,14 @@ public class NGramMap {
      * is not in the data files, returns an empty TimeSeries.
      */
     public TimeSeries countHistory(String word) {
-        // TODO: Fill in this method.
-        return null;
+        return (TimeSeries) wordTimeSeries.get(word).clone();
     }
 
     /**
      * Returns a defensive copy of the total number of words recorded per year in all volumes.
      */
     public TimeSeries totalCountHistory() {
-        // TODO: Fill in this method.
-        return null;
+        return (TimeSeries) yearCount.clone();
     }
 
     /**
@@ -63,8 +68,7 @@ public class NGramMap {
      * TimeSeries.
      */
     public TimeSeries weightHistory(String word, int startYear, int endYear) {
-        // TODO: Fill in this method.
-        return null;
+        return countHistory(word, startYear, endYear).dividedBy(yearCount);
     }
 
     /**
@@ -73,8 +77,7 @@ public class NGramMap {
      * TimeSeries.
      */
     public TimeSeries weightHistory(String word) {
-        // TODO: Fill in this method.
-        return null;
+        return countHistory(word).dividedBy(yearCount);
     }
 
     /**
@@ -84,8 +87,13 @@ public class NGramMap {
      */
     public TimeSeries summedWeightHistory(Collection<String> words,
                                           int startYear, int endYear) {
-        // TODO: Fill in this method.
-        return null;
+        TimeSeries result = new TimeSeries();
+
+        for (String word : words) {
+            result = result.plus(countHistory(word, startYear, endYear));
+        }
+
+        return result.dividedBy(yearCount);
     }
 
     /**
@@ -93,10 +101,47 @@ public class NGramMap {
      * exist in this time frame, ignore it rather than throwing an exception.
      */
     public TimeSeries summedWeightHistory(Collection<String> words) {
-        // TODO: Fill in this method.
-        return null;
+        TimeSeries result = new TimeSeries();
+
+        for (String word : words) {
+            result = result.plus(weightHistory(word));
+        }
+
+        return result;
     }
 
     // TODO: Add any private helper methods.
     // TODO: Remove all TODO comments before submitting.
+
+    private static TimeSeries getYearCounts(In fileIn) {
+        TimeSeries yearCounts = new TimeSeries();
+
+        while (fileIn.hasNextLine()) {
+            String[] line = fileIn.readLine().split(",");
+            yearCounts.put(Integer.parseInt(line[0]), Double.parseDouble(line[1]));
+        }
+
+        return new TimeSeries(yearCounts, MIN_YEAR, MAX_YEAR); // return only year between min and max
+    }
+
+    private static HashMap<String, TimeSeries> getWordTimeSeries(In fileIn) {
+        HashMap<String, TimeSeries> wordCounts = new HashMap<>();
+
+        while (fileIn.hasNextLine()) {
+            String[] line = fileIn.readLine().split("\t");
+            String word = line[0];
+            int year = Integer.parseInt(line[1]);
+            if (year < MIN_YEAR || year > MAX_YEAR) {
+                continue;
+            }
+            double count = Double.parseDouble(line[2]);
+            if (!wordCounts.containsKey(word)) {
+                wordCounts.put(word, new TimeSeries());
+            }
+            TimeSeries timeSeries = wordCounts.get(word);
+            timeSeries.put(year, count);
+        }
+
+        return wordCounts;
+    }
 }
