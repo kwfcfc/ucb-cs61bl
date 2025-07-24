@@ -12,7 +12,7 @@ import static ngrams.TimeSeries.MIN_YEAR;
 /**
  * An object that provides utility methods for making queries on the
  * Google NGrams dataset (or a subset thereof).
- *
+
  * An NGramMap stores pertinent data from a "words file" and a "counts
  * file". It is not a map in the strict sense, but it does provide additional
  * functionality.
@@ -68,7 +68,7 @@ public class NGramMap {
      */
     public TimeSeries countHistory(String word) {
         TimeSeries result = (TimeSeries) wordTimeSeries.get(word).clone();
-      return Objects.requireNonNullElseGet(result, TimeSeries::new);
+        return Objects.requireNonNullElseGet(result, TimeSeries::new);
     }
 
     /**
@@ -106,10 +106,10 @@ public class NGramMap {
         TimeSeries result = new TimeSeries();
 
         for (String word : words) {
-            result = result.plus(countHistory(word, startYear, endYear));
+            result = result.plus(weightHistory(word, startYear, endYear));
         }
 
-        return result.dividedBy(yearCount);
+        return result;
     }
 
     /**
@@ -125,9 +125,6 @@ public class NGramMap {
 
         return result;
     }
-
-    // TODO: Add any private helper methods.
-    // TODO: Remove all TODO comments before submitting.
 
     private static TimeSeries getYearCounts(In fileIn) {
         TimeSeries yearCounts = new TimeSeries();
