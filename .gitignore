@@ -28,6 +28,7 @@
 
 ### Mac OS ###
 .DS_Store
+__MACOSX/
 
 **/.idea/**/workspace.xml
 **/.idea/**/tasks.xml

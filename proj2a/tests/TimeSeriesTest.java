@@ -1,9 +1,9 @@
 import ngrams.TimeSeries;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static com.google.common.truth.Truth.assertThat;
@@ -24,6 +24,8 @@ public class TimeSeriesTest {
         dogPopulation.put(1995, 500.0);
 
         TimeSeries totalPopulation = catPopulation.plus(dogPopulation);
+        TimeSeries anotherTotalPopulation = dogPopulation.plus(catPopulation);
+        assertThat(totalPopulation).isEqualTo(anotherTotalPopulation);
         // expected: 1991: 0,
         //           1992: 100
         //           1994: 600
@@ -60,5 +62,40 @@ public class TimeSeriesTest {
 
         assertThat(totalPopulation.years()).isEmpty();
         assertThat(totalPopulation.data()).isEmpty();
+    }
+
+    @Test
+    public void testDivision() {
+        TimeSeries catPopulation = new TimeSeries();
+        TimeSeries animalPopulation = new TimeSeries();
+
+        catPopulation.put(1992, 100.0);
+        catPopulation.put(1994, 200.0);
+
+        animalPopulation.put(1992, 650.0);
+        animalPopulation.put(1993, 500.0);
+        animalPopulation.put(1994, 400.0);
+
+        TimeSeries dividedPopulation = catPopulation.dividedBy(animalPopulation);
+        // expected: 1992: 100.0 / 650.0,
+        //           1994: 200.0 / 400.0
+
+        List<Double> expectedResult = new ArrayList<>();
+        expectedResult.add(100.0 / 650.0);
+        expectedResult.add(200.0 / 400.0);
+
+        for (int i = 0; i < expectedResult.size(); i += 1) {
+            assertThat(dividedPopulation.data().get(i)).isEqualTo(expectedResult.get(i));
+        }
+
+        TimeSeries dogPopulation = new TimeSeries();
+        dogPopulation.put(1994, 400.0);
+
+        try {
+            catPopulation.dividedBy(dogPopulation);
+            Assertions.fail("Cannot divide by a smaller series");
+        } catch (IllegalArgumentException _) {
+
+        }
     }
 } 

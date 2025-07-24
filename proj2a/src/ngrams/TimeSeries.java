@@ -1,6 +1,8 @@
 package ngrams;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 
 /**
@@ -29,16 +31,14 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      * inclusive of both end points.
      */
     public TimeSeries(TimeSeries ts, int startYear, int endYear) {
-        super();
-        // TODO: Fill in this constructor.
+        super(ts.subMap(startYear, true, endYear, true));
     }
 
     /**
      *  Returns all years for this time series in ascending order.
      */
     public List<Integer> years() {
-        // TODO: Fill in this method.
-        return null;
+        return new ArrayList<>(super.keySet());
     }
 
     /**
@@ -46,8 +46,7 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      *  order of years().
      */
     public List<Double> data() {
-        // TODO: Fill in this method.
-        return null;
+        return new ArrayList<>(super.values());
     }
 
     /**
@@ -60,8 +59,27 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      * should store the value from the TimeSeries that contains that year.
      */
     public TimeSeries plus(TimeSeries ts) {
-        // TODO: Fill in this method.
-        return null;
+        if (this.isEmpty()) {
+            return (TimeSeries) ts.clone();
+        }
+
+        TimeSeries result;
+        TimeSeries smaller;
+
+        if (this.size() > ts.size()) {
+            result = (TimeSeries) this.clone();
+            smaller = ts;
+        } else {
+            result = (TimeSeries) ts.clone();
+            smaller = this;
+        }
+
+        for (Map.Entry<Integer, Double> entry : smaller.entrySet()) {
+            result.computeIfPresent(entry.getKey(), (_, data) -> data + entry.getValue());
+            result.computeIfAbsent(entry.getKey(), (_) -> entry.getValue());
+        }
+
+        return result;
     }
 
     /**
@@ -74,10 +92,15 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      * If TS has a year that is not in this TimeSeries, ignore it.
      */
     public TimeSeries dividedBy(TimeSeries ts) {
-        // TODO: Fill in this method.
-        return null;
-    }
+        TimeSeries result = (TimeSeries) this.clone();
 
-    // TODO: Add any private helper methods.
-    // TODO: Remove all TODO comments before submitting.
+        for (Integer key : result.keySet()) {
+            if (!ts.containsKey(key)) {
+                throw new IllegalArgumentException("Year " + key + " does not exist");
+            }
+            double dividend = ts.get(key);
+            result.computeIfPresent(key, (_, v) -> v / dividend);
+        }
+        return result;
+    }
 }
