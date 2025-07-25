@@ -1,45 +1,160 @@
 package ngrams;
-import edu.berkeley.eecs.inst.cs61b.ngrams.StaffNGramMap;
 
-import java.util.TreeMap;
+import edu.princeton.cs.algs4.In;
 
-/** An object that provides utility methods for making queries on the
- *  Google NGrams dataset (or a subset thereof).
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Objects;
+
+import static ngrams.TimeSeries.MAX_YEAR;
+import static ngrams.TimeSeries.MIN_YEAR;
+
+/**
+ * An object that provides utility methods for making queries on the
+ * Google NGrams dataset (or a subset thereof).
+
+ * An NGramMap stores pertinent data from a "words file" and a "counts
+ * file". It is not a map in the strict sense, but it does provide additional
+ * functionality.
  *
- *  An NGramMap stores pertinent data from a "words file" and a "counts
- *  file". It is not a map in the strict sense, but it does provide additional
- *  functionality.
- *
- *  This is a stripped-down version of the staff solution for 2A. Feel free
- *  to replace this file with your own implementation.
- *
- *  @author Josh Hug
+ * @author Josh Hug
  */
-public class NGramMap extends StaffNGramMap {
+public class NGramMap {
 
-    public static final int MIN_YEAR = 1400;
-    public static final int MAX_YEAR = 2100;
+    private HashMap<String, TimeSeries> wordTimeSeries;
+    private TimeSeries yearCount;
 
-    /** Constructs an NGramMap from WORDSFILENAME and COUNTSFILENAME. */
+    /**
+     * Constructs an NGramMap from WORDSFILENAME and COUNTSFILENAME.
+     */
     public NGramMap(String wordsFilename, String countsFilename) {
-        super(wordsFilename, countsFilename);
+        In wordsIn = new In(wordsFilename);
+        In countsIn = new In(countsFilename);
+
+        yearCount = getYearCounts(countsIn);
+        wordTimeSeries = getWordTimeSeries(wordsIn);
     }
 
-    /** Provides the history of WORD between STARTYEAR and ENDYEAR, inclusive. The returned TreeMap should be a copy,
-     *  not a link to the NGramMap's TreeMap. In other words, changes made
-     *  to the object returned by this function should not also affect the
-     *  NGramMap. This is also known as a "defensive copy". */
-    public TreeMap<Integer, Double> countHistory(String word, int startYear, int endYear) {
-        return super.countHistory(word, startYear, endYear);
+    /**
+     * Provides the history of WORD between STARTYEAR and ENDYEAR, inclusive of both ends. The
+     * returned TimeSeries should be a copy, not a link to this NGramMap's TimeSeries. In other
+     * words, changes made to the object returned by this function should not also affect the
+     * NGramMap. This is also known as a "defensive copy". If the word is not in the data files,
+     * returns an empty TimeSeries.
+     */
+    public TimeSeries countHistory(String word, int startYear, int endYear) {
+        int low = startYear;
+        int high = endYear;
+        TimeSeries wordTS = wordTimeSeries.get(word);
+
+        if (startYear > endYear || wordTS == null) {
+            return new TimeSeries();
+        }
+        // cramp the year into word keys
+        if (startYear < MIN_YEAR || startYear < wordTS.firstKey()) {
+            low = wordTS.firstKey();
+        }
+        if (endYear > MAX_YEAR || endYear > wordTS.lastKey()) {
+            high = wordTS.lastKey();
+        }
+        return new TimeSeries(wordTimeSeries.get(word), low, high);
     }
 
-    /** Provides the history of WORD. The returned TreeMap should be a copy,
-     *  not a link to the NGramMap's TreeMap. In other words, changes made
-     *  to the object returned by this function should not also affect the
-     *  NGramMap. This is also known as a "defensive copy". */
-    public TreeMap<Integer, Double> countHistory(String word) {
-        return countHistory(word, MIN_YEAR, MAX_YEAR);
+    /**
+     * Provides the history of WORD. The returned TimeSeries should be a copy, not a link to this
+     * NGramMap's TimeSeries. In other words, changes made to the object returned by this function
+     * should not also affect the NGramMap. This is also known as a "defensive copy". If the word
+     * is not in the data files, returns an empty TimeSeries.
+     */
+    public TimeSeries countHistory(String word) {
+        TimeSeries result = (TimeSeries) wordTimeSeries.get(word).clone();
+        return Objects.requireNonNullElseGet(result, TimeSeries::new);
     }
 
-    // TODO: Replace this file with your own implementation if you want all the methods of an NGramMap
+    /**
+     * Returns a defensive copy of the total number of words recorded per year in all volumes.
+     */
+    public TimeSeries totalCountHistory() {
+        return (TimeSeries) yearCount.clone();
+    }
+
+    /**
+     * Provides a TimeSeries containing the relative frequency per year of WORD between STARTYEAR
+     * and ENDYEAR, inclusive of both ends. If the word is not in the data files, returns an empty
+     * TimeSeries.
+     */
+    public TimeSeries weightHistory(String word, int startYear, int endYear) {
+        return countHistory(word, startYear, endYear).dividedBy(yearCount);
+    }
+
+    /**
+     * Provides a TimeSeries containing the relative frequency per year of WORD compared to all
+     * words recorded in that year. If the word is not in the data files, returns an empty
+     * TimeSeries.
+     */
+    public TimeSeries weightHistory(String word) {
+        return countHistory(word).dividedBy(yearCount);
+    }
+
+    /**
+     * Provides the summed relative frequency per year of all words in WORDS between STARTYEAR and
+     * ENDYEAR, inclusive of both ends. If a word does not exist in this time frame, ignore it
+     * rather than throwing an exception.
+     */
+    public TimeSeries summedWeightHistory(Collection<String> words,
+                                          int startYear, int endYear) {
+        TimeSeries result = new TimeSeries();
+
+        for (String word : words) {
+            result = result.plus(weightHistory(word, startYear, endYear));
+        }
+
+        return result;
+    }
+
+    /**
+     * Returns the summed relative frequency per year of all words in WORDS. If a word does not
+     * exist in this time frame, ignore it rather than throwing an exception.
+     */
+    public TimeSeries summedWeightHistory(Collection<String> words) {
+        TimeSeries result = new TimeSeries();
+
+        for (String word : words) {
+            result = result.plus(weightHistory(word));
+        }
+
+        return result;
+    }
+
+    private static TimeSeries getYearCounts(In fileIn) {
+        TimeSeries yearCounts = new TimeSeries();
+
+        while (fileIn.hasNextLine()) {
+            String[] line = fileIn.readLine().split(",");
+            yearCounts.put(Integer.parseInt(line[0]), Double.parseDouble(line[1]));
+        }
+
+        return new TimeSeries(yearCounts, MIN_YEAR, MAX_YEAR); // return only year between min and max
+    }
+
+    private static HashMap<String, TimeSeries> getWordTimeSeries(In fileIn) {
+        HashMap<String, TimeSeries> wordCounts = new HashMap<>();
+
+        while (fileIn.hasNextLine()) {
+            String[] line = fileIn.readLine().split("\t");
+            String word = line[0];
+            int year = Integer.parseInt(line[1]);
+            if (year < MIN_YEAR || year > MAX_YEAR) {
+                continue;
+            }
+            double count = Double.parseDouble(line[2]);
+            if (!wordCounts.containsKey(word)) {
+                wordCounts.put(word, new TimeSeries());
+            }
+            TimeSeries timeSeries = wordCounts.get(word);
+            timeSeries.put(year, count);
+        }
+
+        return wordCounts;
+    }
 }
