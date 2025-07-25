@@ -4,6 +4,7 @@ import browser.NgordnetServer;
 import demo.DummyHistoryHandler;
 import demo.DummyHistoryTextHandler;
 import org.slf4j.LoggerFactory;
+import wordnet.WordGraph;
 
 public class Main {
     // ngrams files
@@ -31,10 +32,12 @@ public class Main {
     public static void main(String[] args) {
         NgordnetServer hns = new NgordnetServer();
 
+        WordGraph wg = new WordGraph(SMALL_HYPONYM_FILE, SMALL_SYNSET_FILE);
+
         hns.startUp();
         hns.register("history", new DummyHistoryHandler());
         hns.register("historytext", new DummyHistoryTextHandler());
-        hns.register("hyponyms", new HyponymsHandler());
+        hns.register("hyponyms", new HyponymsHandler(wg));
 
         System.out.println("Finished server startup! Visit http://localhost:4567/ngordnet.html");
     }
