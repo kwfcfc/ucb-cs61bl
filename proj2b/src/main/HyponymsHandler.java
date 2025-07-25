@@ -4,7 +4,10 @@ import browser.NgordnetQuery;
 import browser.NgordnetQueryHandler;
 import wordnet.WordGraph;
 
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 public class HyponymsHandler extends NgordnetQueryHandler {
     private WordGraph wordGraph;
@@ -19,10 +22,17 @@ public class HyponymsHandler extends NgordnetQueryHandler {
         int endYear = q.endYear();
         List<String> words = q.words();
 
-        StringBuilder response = new StringBuilder();
-        for (String word : words) {
-            response.append(wordGraph.searchHyponyms(word)).append('\n');
+        Iterator<String> queries = words.iterator();
+
+        Set<String> response = new HashSet<>();
+        if (queries.hasNext()) {
+            response.addAll(wordGraph.searchHyponyms(queries.next()));
         }
+
+        while (queries.hasNext()) {
+            response.retainAll(wordGraph.searchHyponyms(queries.next()));
+        }
+
         return response.toString();
     }
 }
