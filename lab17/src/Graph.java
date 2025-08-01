@@ -1,8 +1,11 @@
 import java.util.LinkedList;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Iterator;
 import java.util.Stack;
+import java.util.stream.IntStream;
 import java.util.HashSet;
 
 public class Graph implements Iterable<Integer> {
@@ -19,63 +22,86 @@ public class Graph implements Iterable<Integer> {
         vertexCount = numVertices;
     }
 
-    /* Adds a directed Edge (V1, V2) to the graph. That is, adds an edge
-       in ONE directions, from v1 to v2. */
+    /*
+     * Adds a directed Edge (V1, V2) to the graph. That is, adds an edge
+     * in ONE directions, from v1 to v2.
+     */
     public void addEdge(int v1, int v2) {
         addEdge(v1, v2, 0);
     }
 
-    /* Adds a directed Edge (V1, V2) to the graph with weight WEIGHT. If the
-       Edge already exists, replaces the current Edge with a new Edge with
-       weight WEIGHT. */
+    /*
+     * Adds a directed Edge (V1, V2) to the graph with weight WEIGHT. If the
+     * Edge already exists, replaces the current Edge with a new Edge with
+     * weight WEIGHT.
+     */
     public void addEdge(int v1, int v2, int weight) {
-        // TODO: YOUR CODE HERE
+        LinkedList<Edge> fromList = adjLists[v1];
+        Edge newEdge = new Edge(v1, v2, weight);
+        int index = fromList.indexOf(newEdge);
+        if (index < 0) {
+            fromList.addFirst(newEdge);
+        } else {
+            fromList.set(index, newEdge);
+        }
     }
 
-    /* Adds an undirected Edge (V1, V2) to the graph. That is, adds an edge
-       in BOTH directions, from v1 to v2 and from v2 to v1. */
+    /*
+     * Adds an undirected Edge (V1, V2) to the graph. That is, adds an edge
+     * in BOTH directions, from v1 to v2 and from v2 to v1.
+     */
     public void addUndirectedEdge(int v1, int v2) {
         addUndirectedEdge(v1, v2, 0);
     }
 
-    /* Adds an undirected Edge (V1, V2) to the graph with weight WEIGHT. If the
-       Edge already exists, replaces the current Edge with a new Edge with
-       weight WEIGHT. */
+    /*
+     * Adds an undirected Edge (V1, V2) to the graph with weight WEIGHT. If the
+     * Edge already exists, replaces the current Edge with a new Edge with
+     * weight WEIGHT.
+     */
     public void addUndirectedEdge(int v1, int v2, int weight) {
-        // TODO: YOUR CODE HERE
+        addEdge(v1, v2, weight);
+        addEdge(v2, v1, weight);
     }
 
-    /* Returns true if there exists an Edge from vertex FROM to vertex TO.
-       Returns false otherwise. */
+    /*
+     * Returns true if there exists an Edge from vertex FROM to vertex TO.
+     * Returns false otherwise.
+     */
     public boolean isAdjacent(int from, int to) {
-        // TODO: YOUR CODE HERE
-        return false;
+        LinkedList<Edge> fromList = adjLists[from];
+        return fromList.contains(new Edge(from, to));
     }
 
-    /* Returns a list of all the vertices u such that the Edge (V, u)
-       exists in the graph. */
+    /*
+     * Returns a list of all the vertices u such that the Edge (V, u)
+     * exists in the graph.
+     */
     public List<Integer> neighbors(int v) {
-        // TODO: YOUR CODE HERE
-        return null;
+        return adjLists[v].stream().map(Edge::getTo).toList();
     }
+
     /* Returns the number of incoming Edges for vertex V. */
     public int inDegree(int v) {
-        // TODO: YOUR CODE HERE
-        return 0;
+        return IntStream.range(0, adjLists.length)
+                .map(i -> isAdjacent(i, v) ? 1 : 0)
+                .sum();
     }
 
-    /* Returns an Iterator that outputs the vertices of the graph in topological
-       sorted order. */
+    /*
+     * Returns an Iterator that outputs the vertices of the graph in topological
+     * sorted order.
+     */
     public Iterator<Integer> iterator() {
         return new TopologicalIterator();
     }
 
     /**
-     *  A class that iterates through the vertices of this graph,
-     *  starting with a given vertex. Does not necessarily iterate
-     *  through all vertices in the graph: if the iteration starts
-     *  at a vertex v, and there is no path from v to a vertex w,
-     *  then the iteration will not include w.
+     * A class that iterates through the vertices of this graph,
+     * starting with a given vertex. Does not necessarily iterate
+     * through all vertices in the graph: if the iteration starts
+     * at a vertex v, and there is no path from v to a vertex w,
+     * then the iteration will not include w.
      */
     private class DFSIterator implements Iterator<Integer> {
 
@@ -117,7 +143,7 @@ public class Graph implements Iterable<Integer> {
             return curr;
         }
 
-        //ignore this method
+        // ignore this method
         public void remove() {
             throw new UnsupportedOperationException(
                     "vertex removal not implemented");
@@ -125,8 +151,10 @@ public class Graph implements Iterable<Integer> {
 
     }
 
-    /* Returns the collected result of performing a depth-first search on this
-       graph's vertices starting from V. */
+    /*
+     * Returns the collected result of performing a depth-first search on this
+     * graph's vertices starting from V.
+     */
     public List<Integer> dfs(int v) {
         ArrayList<Integer> result = new ArrayList<Integer>();
         Iterator<Integer> iter = new DFSIterator(v);
@@ -137,19 +165,28 @@ public class Graph implements Iterable<Integer> {
         return result;
     }
 
-    /* Returns true iff there exists a path from START to STOP. Assumes both
-       START and STOP are in this graph. If START == STOP, returns true. */
+    /*
+     * Returns true iff there exists a path from START to STOP. Assumes both
+     * START and STOP are in this graph. If START == STOP, returns true.
+     */
     public boolean pathExists(int start, int stop) {
-        // TODO: YOUR CODE HERE
+        if (start == stop) return true;
+        
+        Iterator<Integer> dfsSearch = new DFSIterator(start);
+        while (dfsSearch.hasNext()) {
+            start = dfsSearch.next();
+            if (start == stop) return true;
+        }
         return false;
     }
 
-
-    /* Returns the path from START to STOP. If no path exists, returns an empty
-       List. If START == STOP, returns a List with START. */
+    /*
+     * Returns the path from START to STOP. If no path exists, returns an empty
+     * List. If START == STOP, returns a List with START.
+     */
     public List<Integer> path(int start, int stop) {
-        // TODO: YOUR CODE HERE
-        return null;
+        if (start == stop) return new ArrayList<>(start);
+        return new ArrayList<>();
     }
 
     public List<Integer> topologicalSort() {
@@ -200,6 +237,34 @@ public class Graph implements Iterable<Integer> {
             this.weight = weight;
         }
 
+        Edge(int from, int to) {
+            this(from, to, 0);
+        }
+
+        public int getFrom() {
+            return from;
+        }
+
+        public int getTo() {
+            return to;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == null)
+                return false;
+            if (obj instanceof Edge other) {
+                return from == other.from && to == other.to;
+            }
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(from, to);
+        }
+
+        @Override
         public String toString() {
             return "(" + from + ", " + to + ", weight = " + weight + ")";
         }
