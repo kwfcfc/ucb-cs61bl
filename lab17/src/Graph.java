@@ -209,10 +209,6 @@ public class Graph implements Iterable<Integer> {
             stop = lastVisited;
         }
 
-        // if empty, the stop is not connected to start
-        if (visited.empty()) return result;
-        else result.addFirst(start);
-
         return result;
     }
 
@@ -232,18 +228,27 @@ public class Graph implements Iterable<Integer> {
         private int[] currentInDegree;
 
         TopologicalIterator() {
-            fringe = new Stack<Integer>();
-            // TODO: YOUR CODE HERE
+            fringe = new Stack<>();
+            currentInDegree = IntStream.range(0, adjLists.length).map(Graph.this::inDegree).toArray();
+
+            IntStream.range(0, adjLists.length)
+                    .filter(i -> currentInDegree[i] == 0)
+                    .forEach(i -> fringe.push(i));
         }
 
         public boolean hasNext() {
-            // TODO: YOUR CODE HERE
-            return false;
+            return !fringe.isEmpty();
         }
 
         public Integer next() {
-            // TODO: YOUR CODE HERE
-            return 0;
+            int result =  fringe.pop();
+            for (int neighbor : neighbors(result)) {
+                if (currentInDegree[neighbor] == 1) {
+                    fringe.push(neighbor);
+                }
+                currentInDegree[neighbor]--;
+            }
+            return result;
         }
 
         public void remove() {

@@ -197,4 +197,98 @@ public class TestGraph {
         assertThat(g.pathExists(0, 6)).isTrue();   // 0-2-6
         assertThat(g.pathExists(0, 4)).isFalse();  // Not connected
     }
+
+    /* ------------------------------------------------------------------
+     * Helper: assert that vertex u appears strictly before vertex v
+     * ------------------------------------------------------------------ */
+    private static void assertPrecedes(List<Integer> order, int u, int v) {
+        assertThat(order.indexOf(u))
+                .isLessThan(order.indexOf(v));
+    }
+
+    /* ------------------------------------------------------------------
+     * Empty graph
+     * ------------------------------------------------------------------ */
+    @Test
+    public void topoSort_emptyGraph_returnsEmptyList() {
+        Graph g = new Graph(0);
+        assertThat(g.topologicalSort()).isEmpty();
+    }
+
+    /* ------------------------------------------------------------------
+     * No edges: any permutation is OK
+     * ------------------------------------------------------------------ */
+    @Test
+    public void topoSort_isolatedVertices_containsAllVertices() {
+        Graph g = new Graph(5);           // vertices 0–4, no edges
+        List<Integer> order = g.topologicalSort();
+
+        // Same elements, order irrelevant
+        assertThat(order).containsExactly(0, 1, 2, 3, 4);
+    }
+
+    /* ------------------------------------------------------------------
+     * Linear chain: 0 → 1 → 2 → 3 → 4 (unique ordering)
+     * ------------------------------------------------------------------ */
+    @Test
+    public void topoSort_linearChain_uniqueOrder() {
+        Graph g = new Graph(5);
+        g.addEdge(0, 1);
+        g.addEdge(1, 2);
+        g.addEdge(2, 3);
+        g.addEdge(3, 4);
+
+        List<Integer> order = g.topologicalSort();
+        assertThat(order).containsExactly(0, 1, 2, 3, 4).inOrder();
+    }
+
+    /* ------------------------------------------------------------------
+     * Branching DAG: 0 → {1,2}, {1,2} → 3 (multiple valid answers)
+     * ------------------------------------------------------------------ */
+    @Test
+    public void topoSort_branchingDAG_propertyChecks() {
+        Graph g = new Graph(4);
+        g.addEdge(0, 1);
+        g.addEdge(0, 2);
+        g.addEdge(1, 3);
+        g.addEdge(2, 3);
+
+        List<Integer> order = g.topologicalSort();
+
+        // Must contain every vertex exactly once
+        assertThat(order).containsExactly(0, 1, 2, 3);
+
+        // Each edge constraint must hold
+        assertPrecedes(order, 0, 1);
+        assertPrecedes(order, 0, 2);
+        assertPrecedes(order, 1, 3);
+        assertPrecedes(order, 2, 3);
+    }
+
+    /* ------------------------------------------------------------------
+     * More complex DAG with multiple sources and sinks
+     * ------------------------------------------------------------------ */
+    @Test
+    public void topoSort_complexDAG_propertyChecks() {
+        Graph g = new Graph(6);
+        g.addEdge(0, 2);
+        g.addEdge(1, 2);
+        g.addEdge(1, 3);
+        g.addEdge(2, 4);
+        g.addEdge(3, 4);
+        g.addEdge(4, 5);
+
+        List<Integer> order = g.topologicalSort();
+
+        // 1) Contains every vertex
+        assertThat(order).containsExactly(0, 1, 2, 3, 4, 5);
+
+        // 2) Edge ordering constraints
+        assertPrecedes(order, 0, 2);
+        assertPrecedes(order, 1, 2);
+        assertPrecedes(order, 1, 3);
+        assertPrecedes(order, 2, 4);
+        assertPrecedes(order, 3, 4);
+        assertPrecedes(order, 4, 5);
+    }
 }
