@@ -78,7 +78,7 @@ public class Graph implements Iterable<Integer> {
      * exists in the graph.
      */
     public List<Integer> neighbors(int v) {
-        return adjLists[v].stream().map(Edge::getTo).toList();
+        return adjLists[v].stream().map(Edge::getTo).sorted().toList();
     }
 
     /* Returns the number of incoming Edges for vertex V. */
@@ -185,8 +185,35 @@ public class Graph implements Iterable<Integer> {
      * List. If START == STOP, returns a List with START.
      */
     public List<Integer> path(int start, int stop) {
-        if (start == stop) return new ArrayList<>(start);
-        return new ArrayList<>();
+        if (start == stop) return List.of(start);
+        
+        Stack<Integer> visited = new Stack<>();
+        ArrayList<Integer> result = new ArrayList<>();
+        Iterator<Integer> iter = new DFSIterator(start);
+
+        while (iter.hasNext()) {
+            int next = iter.next();
+            if (next == stop) {
+                result.addLast(stop);
+                break;
+            }
+            visited.push(next);
+        }
+
+        // find adjacent vertex in visited and push to path
+        while (!visited.empty()) {
+            int lastVisited = visited.pop();
+            if (isAdjacent(lastVisited, stop)) {
+                result.addFirst(lastVisited);
+            }
+            stop = lastVisited;
+        }
+
+        // if empty, the stop is not connected to start
+        if (visited.empty()) return result;
+        else result.addFirst(start);
+
+        return result;
     }
 
     public List<Integer> topologicalSort() {
