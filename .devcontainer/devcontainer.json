@@ -4,8 +4,8 @@
   "features": {
     "ghcr.io/devcontainers/features/java:1": {
       "jdkDistro": "graalce",
-      "version": 24,
-      "installMaven": true
+      "version": 21,
+      "installMaven": false
     },
     "ghcr.io/meaningful-ooo/devcontainer-features/fish:2": {
       "fisher": false
