@@ -4,7 +4,6 @@ import edu.princeton.cs.algs4.In;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Objects;
 
 import static ngrams.TimeSeries.MAX_YEAR;
 import static ngrams.TimeSeries.MIN_YEAR;
@@ -68,8 +67,11 @@ public class NGramMap {
      */
     public TimeSeries countHistory(String word) {
         TimeSeries result = wordTimeSeries.get(word);
-        if (result == null) return new TimeSeries();
-        else return (TimeSeries) result.clone();
+        if (result == null) {
+          return new TimeSeries();
+        } else {
+          return (TimeSeries) result.clone();
+        }
     }
 
     /**
