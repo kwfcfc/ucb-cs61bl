@@ -57,7 +57,7 @@ public class NGramMap {
         if (endYear > MAX_YEAR || endYear > wordTS.lastKey()) {
             high = wordTS.lastKey();
         }
-        return new TimeSeries(wordTimeSeries.get(word), low, high);
+        return new TimeSeries(wordTS, low, high);
     }
 
     /**
