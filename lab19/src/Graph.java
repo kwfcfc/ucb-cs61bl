@@ -1,4 +1,9 @@
 import java.util.*;
+import java.util.stream.IntStream;
+
+import com.github.javaparser.utils.Pair;
+
+import edu.princeton.cs.algs4.In;
 
 public class Graph {
 
@@ -30,33 +35,46 @@ public class Graph {
        Edge already exists, replaces the current Edge with a new Edge with
        weight WEIGHT. */
     public void addEdge(int v1, int v2, int weight) {
-        // TODO: YOUR CODE HERE
+        LinkedList<Edge> fromList = adjLists[v1];
+        Edge newEdge = new Edge(v1, v2, weight);
+        int index = fromList.indexOf(newEdge);
+        if (index < 0) {
+            fromList.addFirst(newEdge);
+        } else {
+            fromList.set(index, newEdge);
+        }
     }
 
     /* Adds an undirected Edge (V1, V2) to the graph with weight WEIGHT. If the
        Edge already exists, replaces the current Edge with a new Edge with
        weight WEIGHT. */
     public void addUndirectedEdge(int v1, int v2, int weight) {
-        // TODO: YOUR CODE HERE
+        addEdge(v1, v2, weight);
+        addEdge(v2, v1, weight);
     }
 
     /* Returns true if there exists an Edge from vertex FROM to vertex TO.
        Returns false otherwise. */
     public boolean isAdjacent(int from, int to) {
-        // TODO: YOUR CODE HERE
+        LinkedList<Edge> fromList = adjLists[from];
+        for (Edge edge: fromList) {
+            if (edge.to == to) {
+                return true;
+            }
+        }
         return false;
     }
 
     /* Returns a list of all the vertices u such that the Edge (V, u)
        exists in the graph. */
     public List<Integer> neighbors(int v) {
-        // TODO: YOUR CODE HERE
-        return null;
+        return adjLists[v].stream().map(Edge::to).sorted().toList();
     }
     /* Returns the number of incoming Edges for vertex V. */
     public int inDegree(int v) {
-        // TODO: YOUR CODE HERE
-        return 0;
+        return IntStream.range(0, adjLists.length)
+                .map(i -> isAdjacent(i, v) ? 1 : 0)
+                .sum();
     }
 
     /* Returns a list of the vertices that lie on the shortest path from start to stop. 
@@ -66,8 +84,12 @@ public class Graph {
         return null;
     }
 
-    private Edge getEdge(int v1, int v2) {
-        // TODO: YOUR CODE HERE
+    private Edge getEdge(int v1, int v2) { 
+        for (Edge edge: adjLists[v1]) {
+            if (edge.to == v2) {
+                return edge;
+            }
+        }
         return null;
     }
 
@@ -93,5 +115,4 @@ public class Graph {
 
     }
 
-    
 }
