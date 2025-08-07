@@ -75,8 +75,8 @@ public class TimeSeries extends TreeMap<Integer, Double> {
         }
 
         for (Map.Entry<Integer, Double> entry : smaller.entrySet()) {
-            result.computeIfPresent(entry.getKey(), (_, data) -> data + entry.getValue());
-            result.computeIfAbsent(entry.getKey(), (_) -> entry.getValue());
+            result.computeIfPresent(entry.getKey(), (_year, data) -> data + entry.getValue());
+            result.computeIfAbsent(entry.getKey(), (_year) -> entry.getValue());
         }
 
         return result;
@@ -99,7 +99,7 @@ public class TimeSeries extends TreeMap<Integer, Double> {
                 throw new IllegalArgumentException("Year " + key + " does not exist");
             }
             double dividend = ts.get(key);
-            result.computeIfPresent(key, (_, v) -> v / dividend);
+            result.computeIfPresent(key, (_year, v) -> v / dividend);
         }
         return result;
     }

@@ -94,7 +94,7 @@ public class TimeSeriesTest {
         try {
             catPopulation.dividedBy(dogPopulation);
             Assertions.fail("Cannot divide by a smaller series");
-        } catch (IllegalArgumentException _) {
+        } catch (IllegalArgumentException e) {
 
         }
     }
