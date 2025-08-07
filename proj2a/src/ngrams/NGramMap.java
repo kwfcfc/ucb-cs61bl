@@ -67,8 +67,9 @@ public class NGramMap {
      * is not in the data files, returns an empty TimeSeries.
      */
     public TimeSeries countHistory(String word) {
-        TimeSeries result = (TimeSeries) wordTimeSeries.get(word).clone();
-        return Objects.requireNonNullElseGet(result, TimeSeries::new);
+        TimeSeries result = wordTimeSeries.get(word);
+        if (result == null) return new TimeSeries();
+        else return (TimeSeries) result.clone();
     }
 
     /**
