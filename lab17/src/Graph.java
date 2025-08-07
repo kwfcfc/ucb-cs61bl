@@ -185,29 +185,28 @@ public class Graph implements Iterable<Integer> {
      * List. If START == STOP, returns a List with START.
      */
     public List<Integer> path(int start, int stop) {
-        if (start == stop) return List.of(start);
-        
         Stack<Integer> visited = new Stack<>();
-        ArrayList<Integer> result = new ArrayList<>();
         Iterator<Integer> iter = new DFSIterator(start);
 
+        ArrayList<Integer> result = new ArrayList<>();
+
         while (iter.hasNext()) {
-            int next = iter.next();
-            if (next == stop) {
-                result.add(stop); // add to the end
-                break;
-            }
-            visited.push(next);
+            start = iter.next();
+            visited.push(start);
+            if (start == stop) break;
         }
 
-        // find adjacent vertex in visited and push to path
-        // if result is empty, the stop is not found
-        while (!visited.empty() && !result.isEmpty()) {
-            int lastVisited = visited.pop();
-            if (isAdjacent(lastVisited, stop)) {
-                result.add(0,lastVisited); // add to the first index
+        // push the stop element
+        int peek = visited.pop();
+        if (peek != stop) return result;
+        else result.add(peek);
+
+        while (!visited.empty()) {
+            peek = visited.pop();
+            int head = result.get(0);
+            if (isAdjacent(peek, head)) {
+                result.add(0, peek);
             }
-            stop = lastVisited;
         }
 
         return result;
