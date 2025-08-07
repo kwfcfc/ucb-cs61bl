@@ -59,7 +59,6 @@ public class TestGraph {
     private void generateG4() {
         g.addUndirectedEdge(0, 1);
         g.addUndirectedEdge(0, 2);
-        g.addUndirectedEdge(1, 3);
         g.addUndirectedEdge(1, 4);
     }
 
@@ -165,7 +164,8 @@ public class TestGraph {
     @Test
     public void path_testTree() {
         generateG4();
-        assertThat(g.pathExists(0, 4)).isTrue();
+        assertThat(g.path(0, 3)).isEmpty();
+        assertThat(g.path(0, 4)).containsExactly(0,1,4).inOrder();
     }
 
     @Test

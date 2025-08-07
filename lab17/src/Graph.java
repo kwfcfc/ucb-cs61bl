@@ -1,7 +1,6 @@
 import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Iterator;
 import java.util.Stack;
 import java.util.stream.IntStream;
@@ -202,7 +201,8 @@ public class Graph implements Iterable<Integer> {
         }
 
         // find adjacent vertex in visited and push to path
-        while (!visited.empty()) {
+        // if result is empty, the stop is not found
+        while (!visited.empty() && !result.isEmpty()) {
             int lastVisited = visited.pop();
             if (isAdjacent(lastVisited, stop)) {
                 result.add(0,lastVisited); // add to the first index
