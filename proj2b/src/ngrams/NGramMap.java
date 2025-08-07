@@ -4,7 +4,6 @@ import edu.princeton.cs.algs4.In;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Objects;
 
 import static ngrams.TimeSeries.MAX_YEAR;
 import static ngrams.TimeSeries.MIN_YEAR;
@@ -57,7 +56,7 @@ public class NGramMap {
         if (endYear > MAX_YEAR || endYear > wordTS.lastKey()) {
             high = wordTS.lastKey();
         }
-        return new TimeSeries(wordTimeSeries.get(word), low, high);
+        return new TimeSeries(wordTS, low, high);
     }
 
     /**
@@ -67,8 +66,12 @@ public class NGramMap {
      * is not in the data files, returns an empty TimeSeries.
      */
     public TimeSeries countHistory(String word) {
-        TimeSeries result = (TimeSeries) wordTimeSeries.get(word).clone();
-        return Objects.requireNonNullElseGet(result, TimeSeries::new);
+        TimeSeries result = wordTimeSeries.get(word);
+        if (result == null) {
+            return new TimeSeries();
+        } else {
+            return (TimeSeries) result.clone();
+        }
     }
 
     /**
