@@ -57,11 +57,10 @@ public class TestGraph {
         g.addUndirectedEdge(4, 5);
     }
     private void generateG4() {
-        g.addEdge(0, 1);
-        g.addEdge(1, 2);
-        g.addEdge(2, 0);
-        g.addEdge(2, 3);
-        g.addEdge(4, 2);
+        g.addUndirectedEdge(0, 1);
+        g.addUndirectedEdge(0, 2);
+        g.addUndirectedEdge(1, 3);
+        g.addUndirectedEdge(1, 4);
     }
 
     /* ---------- basic init ---------- */
@@ -161,6 +160,12 @@ public class TestGraph {
     public void path_emptyWhenNoPath() {
         generateG2();                // DAG 无 3→0
         assertThat(g.path(3, 0)).isEmpty();
+    }
+
+    @Test
+    public void path_testTree() {
+        generateG4();
+        assertThat(g.pathExists(0, 4)).isTrue();
     }
 
     @Test

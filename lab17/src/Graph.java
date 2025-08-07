@@ -39,7 +39,7 @@ public class Graph implements Iterable<Integer> {
         Edge newEdge = new Edge(v1, v2, weight);
         int index = fromList.indexOf(newEdge);
         if (index < 0) {
-            fromList.addFirst(newEdge);
+            fromList.add(0, newEdge);
         } else {
             fromList.set(index, newEdge);
         }
@@ -68,8 +68,12 @@ public class Graph implements Iterable<Integer> {
      * Returns false otherwise.
      */
     public boolean isAdjacent(int from, int to) {
-        LinkedList<Edge> fromList = adjLists[from];
-        return fromList.contains(new Edge(from, to));
+        for (Edge edge: adjLists[from]) {
+            if (edge.to() == to) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /*
@@ -77,7 +81,7 @@ public class Graph implements Iterable<Integer> {
      * exists in the graph.
      */
     public List<Integer> neighbors(int v) {
-        return adjLists[v].stream().map(Edge::getTo).sorted().toList();
+        return adjLists[v].stream().map(Edge::to).sorted().toList();
     }
 
     /* Returns the number of incoming Edges for vertex V. */
@@ -169,8 +173,6 @@ public class Graph implements Iterable<Integer> {
      * START and STOP are in this graph. If START == STOP, returns true.
      */
     public boolean pathExists(int start, int stop) {
-        if (start == stop) return true;
-        
         Iterator<Integer> dfsSearch = new DFSIterator(start);
         while (dfsSearch.hasNext()) {
             start = dfsSearch.next();
@@ -272,34 +274,14 @@ public class Graph implements Iterable<Integer> {
             this(from, to, 0);
         }
 
-        public int getFrom() {
-            return from;
-        }
-
-        public int getTo() {
+        public int to() {
             return to;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (obj == null)
-                return false;
-            if (obj instanceof Edge other) {
-                return from == other.from && to == other.to;
-            }
-            return false;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(from, to);
         }
 
         @Override
         public String toString() {
             return "(" + from + ", " + to + ", weight = " + weight + ")";
         }
-
     }
 
     private void generateG1() {
