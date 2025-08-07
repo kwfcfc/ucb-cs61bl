@@ -1,6 +1,5 @@
 import java.util.LinkedList;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Iterator;
@@ -194,7 +193,7 @@ public class Graph implements Iterable<Integer> {
         while (iter.hasNext()) {
             int next = iter.next();
             if (next == stop) {
-                result.addLast(stop);
+                result.add(stop); // add to the end
                 break;
             }
             visited.push(next);
@@ -204,7 +203,7 @@ public class Graph implements Iterable<Integer> {
         while (!visited.empty()) {
             int lastVisited = visited.pop();
             if (isAdjacent(lastVisited, stop)) {
-                result.addFirst(lastVisited);
+                result.add(0,lastVisited); // add to the first index
             }
             stop = lastVisited;
         }
