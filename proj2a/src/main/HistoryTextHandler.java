@@ -20,11 +20,13 @@ public class HistoryTextHandler extends NgordnetQueryHandler {
         int endYear = q.endYear();
 
         StringBuilder responseBuilder = new StringBuilder();
-/*         StringBuilder responseBuilder = new StringBuilder("You entered the following info into the browser:\n");
-        responseBuilder.append("Words: ").append(q.words()).append("\n");
-        responseBuilder.append("Start Year: ").append(q.startYear()).append("\n");
-        responseBuilder.append("End Year: ").append(q.endYear()).append("\n");
- */
+        /*
+         * StringBuilder responseBuilder = new
+         * StringBuilder("You entered the following info into the browser:\n");
+         * responseBuilder.append("Words: ").append(q.words()).append("\n");
+         * responseBuilder.append("Start Year: ").append(q.startYear()).append("\n");
+         * responseBuilder.append("End Year: ").append(q.endYear()).append("\n");
+         */
         for (String word : words) {
             responseBuilder.append(word + ": ").append(ngm.weightHistory(word, startYear, endYear)).append("\n");
         }
