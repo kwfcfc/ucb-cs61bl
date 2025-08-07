@@ -68,9 +68,9 @@ public class NGramMap {
     public TimeSeries countHistory(String word) {
         TimeSeries result = wordTimeSeries.get(word);
         if (result == null) {
-          return new TimeSeries();
+            return new TimeSeries();
         } else {
-          return (TimeSeries) result.clone();
+            return (TimeSeries) result.clone();
         }
     }
 
