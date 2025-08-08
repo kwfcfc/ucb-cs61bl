@@ -3,7 +3,9 @@ package wordnet;
 import edu.princeton.cs.algs4.In;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -17,19 +19,19 @@ import java.util.Set;
  * @author Pusen Yi
  */
 public class WordGraph {
-    private ArrayList<WordNode> nodes;
+    private Map<Integer,WordNode> nodes;
 
     public WordGraph(String hyponymsFile, String synsetsFile) {
         In synsetsIn = new In(synsetsFile);
         In hyponymsIn = new In(hyponymsFile);
-        nodes = new ArrayList<>();
+        nodes = new HashMap<>();
         synsetsFileHelper(synsetsIn, nodes);
         hyponymsFileHelper(hyponymsIn, nodes);
     }
 
     public Set<String> searchHyponyms(String word) {
         Set<String> hyponyms = new HashSet<>();
-        for (WordNode node : nodes) {
+        for (WordNode node : nodes.values()) {
             if (node.isSynonym(word)) {
                 hyponyms.addAll(node.getHyponyms());
             }
@@ -37,14 +39,15 @@ public class WordGraph {
         return hyponyms;
     }
 
-    private static void synsetsFileHelper(In readIn, ArrayList<WordNode> nodes) {
+    private static void synsetsFileHelper(In readIn, Map<Integer,WordNode> nodes) {
         while (readIn.hasNextLine()) {
             String[] line = readIn.readLine().split(",");
-            nodes.add(new WordNode(line[1]));
+            int id = Integer.parseInt(line[0]);
+            nodes.putIfAbsent(id, new WordNode(line[1])); // only insert new node
         }
     }
 
-    private static void hyponymsFileHelper(In readIn, ArrayList<WordNode> nodes) {
+    private static void hyponymsFileHelper(In readIn, Map<Integer, WordNode>nodes) {
         while (readIn.hasNextLine()) {
             String[] line = readIn.readLine().split(",");
             int parent = Integer.parseInt(line[0]);

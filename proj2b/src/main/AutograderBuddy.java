@@ -4,7 +4,6 @@ import browser.NgordnetQueryHandler;
 import ngrams.NGramMap;
 import wordnet.WordGraph;
 
-
 public class AutograderBuddy {
     /** Returns a HyponymHandler */
     public static NgordnetQueryHandler getHyponymsHandler(
