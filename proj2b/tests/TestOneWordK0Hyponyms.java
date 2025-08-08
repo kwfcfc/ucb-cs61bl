@@ -5,7 +5,6 @@ import main.AutograderBuddy;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import static com.google.common.truth.Truth.assertThat;
 
@@ -40,9 +39,8 @@ public class TestOneWordK0Hyponyms {
 
         NgordnetQuery nq = new NgordnetQuery(words, 0, 0, 0);
         String actual = studentHandler.handle(nq);
-        Set<String> actualWords = Set.of(actual.substring(1, actual.length() - 1).split(", "));
-        Set<String> expected = Set.of("act", "action", "change", "demotion", "human_action", "human_activity", "variation");
-        assertThat(actualWords).isEqualTo(expected);
+        String expected = "[act, action, change, demotion, human_action, human_activity, variation]";
+        assertThat(actual).isEqualTo(expected);
     }
 
     // TODO: Add more unit tests (including edge case tests) here.

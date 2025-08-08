@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class HyponymsHandler extends NgordnetQueryHandler {
     private WordGraph wordGraph;
@@ -24,7 +25,7 @@ public class HyponymsHandler extends NgordnetQueryHandler {
 
         Iterator<String> queries = words.iterator();
 
-        Set<String> response = new HashSet<>();
+        Set<String> response = new TreeSet<>();
         if (queries.hasNext()) {
             response.addAll(wordGraph.searchHyponyms(queries.next()));
         }
