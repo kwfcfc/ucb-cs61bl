@@ -22,7 +22,8 @@ public class WordGraph {
     public WordGraph(String hyponymsFile, String synsetsFile) {
         In synsetsIn = new In(synsetsFile);
         In hyponymsIn = new In(hyponymsFile);
-        nodes = synsetsFileHelper(synsetsIn);
+        nodes = new ArrayList<>();
+        synsetsFileHelper(synsetsIn, nodes);
         hyponymsFileHelper(hyponymsIn, nodes);
     }
 
@@ -36,13 +37,11 @@ public class WordGraph {
         return hyponyms;
     }
 
-    private static ArrayList<WordNode> synsetsFileHelper(In readIn) {
-        ArrayList<WordNode> nodes = new ArrayList<>();
+    private static void synsetsFileHelper(In readIn, ArrayList<WordNode> nodes) {
         while (readIn.hasNextLine()) {
             String[] line = readIn.readLine().split(",");
             nodes.add(new WordNode(line[1]));
         }
-        return nodes;
     }
 
     private static void hyponymsFileHelper(In readIn, ArrayList<WordNode> nodes) {
