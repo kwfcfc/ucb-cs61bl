@@ -10,7 +10,7 @@ class WordGraphTest {
 
     @Test
     void searchHyponyms() {
-        WordGraph wn = new WordGraph("./data/wordnet/hyponyms11.txt","./data/wordnet/synsets11.txt");
+        WordGraph wn = new WordGraph("./data/wordnet/hyponyms11.txt", "./data/wordnet/synsets11.txt");
         assertThat(wn.searchHyponyms("antihistamine")).isEqualTo(Set.of("antihistamine", "actifed"));
     }
 }

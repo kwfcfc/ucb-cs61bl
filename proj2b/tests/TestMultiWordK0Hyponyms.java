@@ -1,6 +1,5 @@
 import browser.NgordnetQuery;
 import browser.NgordnetQueryHandler;
-import edu.princeton.cs.algs4.StdRandom;
 import main.AutograderBuddy;
 import org.junit.jupiter.api.Test;
 
@@ -8,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.truth.Truth.assertThat;
-import static com.google.common.truth.Truth.assertWithMessage;
 
 /** Tests the case where the list of words is length greater than 1, but k is still zero. */
 public class TestMultiWordK0Hyponyms {
@@ -47,7 +45,4 @@ public class TestMultiWordK0Hyponyms {
         String expected = "[alteration, change, increase, jump, leap, modification, saltation, transition]";
         assertThat(actual).isEqualTo(expected);
     }
-
-    // TODO: Add more unit tests (including edge case tests) here.
-
 }

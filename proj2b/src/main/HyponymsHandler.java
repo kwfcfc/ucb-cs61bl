@@ -6,18 +6,11 @@ import ngrams.NGramMap;
 import ngrams.TimeSeries;
 import wordnet.WordGraph;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-
-import org.checkerframework.checker.units.qual.min;
 
 public class HyponymsHandler extends NgordnetQueryHandler {
     private WordGraph wordGraph;
@@ -79,8 +72,11 @@ public class HyponymsHandler extends NgordnetQueryHandler {
             topK.retainAll(wordGraph.searchHyponyms(queries.next()));
         }        
 
-        List<String> result = topK.stream().limit(k).filter(s -> wordCount(s, startYear, endYear) > 0).collect(Collectors.toList());
-        Collections.sort(result);
+        List<String> result = topK.stream().
+                limit(k).
+                filter(s -> wordCount(s, startYear, endYear) > 0).
+                sorted().
+                toList();
 
         return result.toString();
     }

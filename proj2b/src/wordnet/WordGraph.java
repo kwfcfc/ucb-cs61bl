@@ -2,7 +2,6 @@ package wordnet;
 
 import edu.princeton.cs.algs4.In;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -19,7 +18,7 @@ import java.util.Set;
  * @author Pusen Yi
  */
 public class WordGraph {
-    private Map<Integer,WordNode> nodes;
+    private Map<Integer, WordNode> nodes;
 
     public WordGraph(String hyponymsFile, String synsetsFile) {
         In synsetsIn = new In(synsetsFile);
@@ -39,7 +38,7 @@ public class WordGraph {
         return hyponyms;
     }
 
-    private static void synsetsFileHelper(In readIn, Map<Integer,WordNode> nodes) {
+    private static void synsetsFileHelper(In readIn, Map<Integer, WordNode> nodes) {
         while (readIn.hasNextLine()) {
             String[] line = readIn.readLine().split(",");
             int id = Integer.parseInt(line[0]);
@@ -47,7 +46,7 @@ public class WordGraph {
         }
     }
 
-    private static void hyponymsFileHelper(In readIn, Map<Integer, WordNode>nodes) {
+    private static void hyponymsFileHelper(In readIn, Map<Integer, WordNode> nodes) {
         while (readIn.hasNextLine()) {
             String[] line = readIn.readLine().split(",");
             int parent = Integer.parseInt(line[0]);
