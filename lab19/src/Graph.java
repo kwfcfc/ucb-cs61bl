@@ -119,10 +119,14 @@ public class Graph {
 
         while (!fringe.isEmpty()) {
             int shortest = fringe.poll();
+
+            if (visited[shortest]) {
+                continue;
+            }
+            visited[shortest] = true;
+
             if (shortest == stop) {
                 break;
-            } else {
-                visited[shortest] = true;
             }
 
             // already set the initial neighbor distance to MAX_VALUE
@@ -131,7 +135,6 @@ public class Graph {
                 if (newEdge.weight + distance[shortest] < distance[neighbor]) {
                     distance[neighbor] = newEdge.weight + distance[shortest];
                     predecessor[neighbor] = shortest;
-                    visited[neighbor] = true;
                     fringe.add(neighbor);
                 }
             }
