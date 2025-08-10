@@ -21,7 +21,8 @@ public class QuickSort {
      * Helper method for sort: runs quicksort algorithm on array from [start:end)
      */
     private static void quickSort(int[] arr, int start, int end) {
-        if (end <= start + 1) return;
+        if (end <= start + 1)
+            return;
 
         int[] slice = partition(arr, start, end);
         quickSort(arr, start, slice[0]);
@@ -30,11 +31,14 @@ public class QuickSort {
 
     // set the start of the arr as the pivot from [start:end)
     private static void setPivot(int[] arr, int start, int end) {
-        if (end - start <= 2) return;
+        if (end - start <= 2)
+            return;
         int middle = start + (end - start) / 2;
         int a = arr[start], b = arr[middle], c = arr[end - 1];
-        if ((a <= b && b <= c) || (c <= b && b <= a)) swap(arr, start, middle);
-        if ((a <= c && c <= b) || (b <= c && c <= a)) swap(arr, start, end - 1);
+        if ((a <= b && b <= c) || (c <= b && b <= a))
+            swap(arr, start, middle);
+        if ((a <= c && c <= b) || (b <= c && c <= a))
+            swap(arr, start, end - 1);
     }
 
     /**
@@ -51,14 +55,17 @@ public class QuickSort {
      * Most of the code for quicksort is in this function
      */
     private static int[] partition(int[] arr, int start, int end) {
-        if (end <= start + 1) return new int[]{start, end};
+        if (end <= start + 1)
+            return new int[] { start, end };
         setPivot(arr, start, end);
         int pivot = arr[start];
         int left = start + 1;
         int right = end - 1;
         while (left <= right) {
-            for (; left <= right && arr[left] <= pivot; ++left);
-            for (; left <= right && arr[right] > pivot; --right);
+            for (; left <= right && arr[left] <= pivot; ++left)
+                ;
+            for (; left <= right && arr[right] > pivot; --right)
+                ;
 
             if (left <= right) {
                 swap(arr, left, right);
@@ -66,7 +73,7 @@ public class QuickSort {
         }
 
         swap(arr, right, start);
-        return new int[]{right, left};
+        return new int[] { right, left };
     }
 
     /**
@@ -79,7 +86,7 @@ public class QuickSort {
      */
     private static void swap(int[] arr, int i, int j) {
         int temp = arr[i];
-        arr[i]  = arr[j];
-        arr[j]  = temp;
-    }    
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
 }   

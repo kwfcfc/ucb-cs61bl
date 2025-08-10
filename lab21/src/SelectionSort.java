@@ -37,7 +37,6 @@ public class SelectionSort {
         return min;
     }
 
-
     /**
      * @param arr
      * @param i

@@ -14,9 +14,9 @@ public class MergeSort {
      *
      */
     public static int[] sort(int[] arr) {
-        if (arr.length <= 1) {
+        if (arr.length <= 1)
             return arr;
-        }
+
         int middle = arr.length / 2;
         int[] left = Arrays.copyOfRange(arr, 0, middle);
         int[] right = Arrays.copyOfRange(arr, middle, arr.length);

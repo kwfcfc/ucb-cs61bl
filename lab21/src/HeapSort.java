@@ -89,7 +89,6 @@ public class HeapSort {
         return j;
     }
 
-
     /**
      * @param i
      * @return the index of the left child of the node at index i
@@ -111,7 +110,5 @@ public class HeapSort {
     private static int getRightChild(int i) {
         return 2 * i + 2;
     }
-
-
 }
 
