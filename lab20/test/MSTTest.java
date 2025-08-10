@@ -12,7 +12,8 @@ import static com.google.common.truth.Truth.assertThat;
 public class MSTTest {
 
     private final static String SEPARATOR = System.getProperty("file.separator");
-    private final static String INPUT_FOLDER = System.getProperty("user.dir") + SEPARATOR + "test" + SEPARATOR + "inputs";
+    private final static String INPUT_FOLDER = System.getProperty("user.dir") + SEPARATOR + "test" + SEPARATOR
+            + "inputs";
     private final static String NORMAL = INPUT_FOLDER + SEPARATOR + "graphTestNormal.in";
     private final static String ALL_DISJOINT = INPUT_FOLDER + SEPARATOR + "graphTestAllDisjoint.in";
     private final static String SOME_DISJOINT = INPUT_FOLDER + SEPARATOR + "graphTestSomeDisjoint.in";
@@ -33,12 +34,42 @@ public class MSTTest {
     }
 
     @Test
-    public void test1() {
-        // TODO: write more tests!
+    public void testAllDisjoint() {
+        Graph input = loadFromText(ALL_DISJOINT);
+
+        Graph mst1 = input.prims(0);
+        Graph mst2 = input.kruskals();
+        assertThat(mst1).isNull();
+        assertThat(mst2).isNull();
     }
 
-    /* Returns a randomly generated graph with VERTICES number of vertices and
-       EDGES number of edges with max weight WEIGHT. */
+    @Test
+    public void testSomeDisjoint() {
+        Graph input = loadFromText(SOME_DISJOINT);
+
+        Graph mst1 = input.prims(0);
+        Graph mst2 = input.kruskals();
+        assertThat(mst1).isNull();
+        assertThat(mst2).isNull();
+    }    
+
+    @Test 
+    public void testMultiEdge() {
+        Graph input = loadFromText(MULTI_EDGE);
+        Graph output = new Graph();
+        output.addEdge(0, 1, 0);
+        output.addEdge(1, 2, 1);
+
+        Graph mst1 = input.prims(0);
+        Graph mst2 = input.kruskals();
+        assertThat(mst1).isEqualTo(output);
+        assertThat(mst2).isEqualTo(output);
+    }
+
+    /*
+     * Returns a randomly generated graph with VERTICES number of vertices and
+     * EDGES number of edges with max weight WEIGHT.
+     */
     public static Graph randomGraph(int vertices, int edges, int weight) {
         Graph g = new Graph();
         Random rng = new Random();
@@ -52,8 +83,10 @@ public class MSTTest {
         return g;
     }
 
-    /* Returns a Graph object with integer edge weights as parsed from
-       FILENAME. Talk about the setup of this file. */
+    /*
+     * Returns a Graph object with integer edge weights as parsed from
+     * FILENAME. Talk about the setup of this file.
+     */
     public static Graph loadFromText(String filename) {
         Charset cs = Charset.forName("US-ASCII");
         try (BufferedReader r = Files.newBufferedReader(Paths.get(filename), cs)) {
@@ -80,4 +113,3 @@ public class MSTTest {
         }
     }
 }
-
