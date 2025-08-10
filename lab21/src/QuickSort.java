@@ -57,8 +57,8 @@ public class QuickSort {
         int left = start + 1;
         int right = end - 1;
         while (left <= right) {
-            for (; arr[left] <= pivot && left <= right; ++left);
-            for (; arr[right] > pivot && left <= right; --right);
+            for (; left <= right && arr[left] <= pivot; ++left);
+            for (; left <= right && arr[right] > pivot; --right);
 
             if (left <= right) {
                 swap(arr, left, right);

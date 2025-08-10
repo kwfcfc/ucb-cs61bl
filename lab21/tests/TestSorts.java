@@ -35,8 +35,6 @@ public class TestSorts {
 
         HeapSort.sort(arr);
         assertThat(arr).isEqualTo(expected);
-
-
     }
 
     @Test
@@ -51,7 +49,6 @@ public class TestSorts {
 
     @Test
     public void testQuickSort() {
-
         int[] arr = {6, 3, 5, 7, 2, 1, 4};
         int[] expected = {1, 2, 3, 4, 5, 6, 7};
 
@@ -67,4 +64,13 @@ public class TestSorts {
         int[] result = QuickSort.sort(arr);
         assertThat(result).isEqualTo(expected);
     }
+
+    @Test
+    public void testQuickSortEmptyRight() {
+        int[] arr = { 2, 4, 6, 3, 5, 8, 1 };
+        int[] expected = { 1, 2, 3, 4, 5, 6, 8 };
+
+        int[] result = QuickSort.sort(arr);
+        assertThat(result).isEqualTo(expected);
+    }    
 }
