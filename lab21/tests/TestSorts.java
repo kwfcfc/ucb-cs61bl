@@ -15,8 +15,6 @@ public class TestSorts {
 
         InsertionSort.sort(arr);
         assertThat(arr).isEqualTo(expected);
-
-
     }
 
     @Test
@@ -27,8 +25,6 @@ public class TestSorts {
 
         SelectionSort.sort(arr);
         assertThat(arr).isEqualTo(expected);
-
-
     }
 
     @Test
@@ -51,8 +47,6 @@ public class TestSorts {
 
         int[] res = MergeSort.sort(arr);
         assertThat(res).isEqualTo(expected);
-
-
     }
 
     @Test
@@ -63,8 +57,14 @@ public class TestSorts {
 
         int[] res = QuickSort.sort(arr);
         assertThat(res).isEqualTo(expected);
-
-
     }
 
+    @Test
+    public void testQuickSortEmptyLeft() {
+        int[] arr = { 7, 1, 4, 6, 3, 5, 8 };
+        int[] expected = { 1, 3, 4, 5, 6, 7, 8 };
+
+        int[] result = QuickSort.sort(arr);
+        assertThat(result).isEqualTo(expected);
+    }
 }
