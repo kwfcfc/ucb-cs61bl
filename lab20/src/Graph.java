@@ -1,7 +1,5 @@
 import java.util.*;
 
-import org.checkerframework.checker.units.qual.min;
-
 import ucb.junit.textui;
 
 /* A mutable and finite Graph object. Edge labels are stored via a HashMap
@@ -146,6 +144,8 @@ public class Graph {
         while (!fringe.isEmpty()) {
             int minEdge = fringe.poll();
 
+            // skip the old vertices in fringe, because we only add new vertice with updated
+            // distance but not removing the old ones
             if (tree.containsVertex(minEdge)) {
                 continue;
             }
@@ -174,7 +174,27 @@ public class Graph {
     }
 
     public Graph kruskals() {
-        // TODO: YOUR CODE HERE
+        Graph tree = new Graph();
+
+        List<Edge> sorted = getAllEdges().stream().sorted().toList();
+
+        UnionFind disjoint = new UnionFind(getAllVertices().size());
+        for (Edge edge : sorted) {
+            int src = edge.getSource();
+            if (tree.getAllVertices().size() == 0) {
+                tree.addVertex(src);
+            }
+            int dst = edge.getDest();
+            // if union find return results from different disjoint set
+            if (!disjoint.connected(src, dst)) {
+                tree.addEdge(edge);
+                disjoint.union(src, dst);
+            }
+            if (tree.getAllEdges().size() + 1 == this.getAllVertices().size()) {
+                return tree;
+            }
+        }
+
         return null;
     }
 
