@@ -1,8 +1,10 @@
+import java.util.Arrays;
+
 public class MergeSort {
 
 
     /**
-     * @param arr
+     * @param arr Input array
      *
      * Sort the array arr using merge sort.
      * The merge sort algorithm is as follows:
@@ -12,13 +14,20 @@ public class MergeSort {
      *
      */
     public static int[] sort(int[] arr) {
-        // TODO: Implement merge sort
-        return arr;
+        if (arr.length <= 1) {
+            return arr;
+        }
+        int middle = arr.length / 2;
+        int[] left = Arrays.copyOfRange(arr, 0, middle);
+        int[] right = Arrays.copyOfRange(arr, middle, arr.length);
+        left = sort(left);
+        right = sort(right);
+        return merge(left, right);
     }
 
     /**
-     * @param a
-     * @param b
+     * @param a Left merge array
+     * @param b Right merge array
      *
      * Merge the sorted half-lists.
      *
@@ -26,7 +35,26 @@ public class MergeSort {
      */
     private static int[] merge(int[] a, int[] b) {
         int[] c = new int[a.length + b.length];
-        // TODO: Implement merge
+        int left_i = 0;
+        int right_i = 0;
+        int i = 0;
+
+        while (left_i < a.length && right_i < b.length) {
+            if (a[left_i] <= b[right_i]) {
+                c[i] = a[left_i];
+                left_i++;
+            } else {
+                c[i] = b[right_i];
+                right_i++;
+            }
+            i++;
+        }
+
+        if (left_i < a.length) {
+            System.arraycopy(a, left_i, c, i, a.length - left_i);
+        } else if (right_i < b.length) {
+            System.arraycopy(b, right_i, c, i, b.length - right_i);
+        }
         return c;
     }
 }
