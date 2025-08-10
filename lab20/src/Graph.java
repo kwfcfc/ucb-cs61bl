@@ -1,5 +1,9 @@
 import java.util.*;
 
+import org.checkerframework.checker.units.qual.min;
+
+import ucb.junit.textui;
+
 /* A mutable and finite Graph object. Edge labels are stored via a HashMap
    where labels are mapped to a key calculated by the following. The graph is
    undirected (whenever an Edge is added, the dual Edge is also added). Vertices
@@ -102,8 +106,10 @@ public class Graph {
         return neighbors.equals(other.neighbors) && edges.equals(other.edges);
     }
 
-    /* A helper function that adds a new edge from V1 to V2 with WEIGHT as the
-       label. */
+    /*
+     * A helper function that adds a new edge from V1 to V2 with WEIGHT as the
+     * label.
+     */
     private void addEdgeHelper(int v1, int v2, int weight) {
         addVertex(v1);
         addVertex(v2);
@@ -119,8 +125,52 @@ public class Graph {
     }
 
     public Graph prims(int start) {
-        // TODO: YOUR CODE HERE
-        return null;
+        Graph tree = new Graph();
+
+        tree.addVertex(start);
+
+        // Prepare distance map
+        HashMap<Integer, Edge> distFromTree = new HashMap<>();
+        for (Edge neighborEdge : getEdges(start)) {
+            int neighbor = neighborEdge.getDest();
+            distFromTree.put(neighbor, neighborEdge);
+        }
+
+        // add neighbor to the fringe
+        PriorityQueue<Integer> fringe = new PriorityQueue<>(getAllVertices().size() - 1,
+                new PrimVertexComparator(distFromTree));
+        for (int vertex : getNeighbors(start)) {
+            fringe.add(vertex);
+        }
+
+        while (!fringe.isEmpty()) {
+            int minEdge = fringe.poll();
+
+            if (tree.containsVertex(minEdge)) {
+                continue;
+            }
+
+            tree.addEdge(distFromTree.get(minEdge));
+
+            for (Edge newNeighborEdge : getEdges(minEdge)) {
+                int newNeighbor = newNeighborEdge.getDest();
+                if (tree.containsVertex(newNeighbor)) {
+                    continue;
+                }
+
+                // either it is a new vertex, or another shorter path to connect the path
+                if (!distFromTree.containsKey(newNeighbor)
+                        || distFromTree.get(newNeighbor).getWeight() > newNeighborEdge.getWeight()) {
+                    distFromTree.put(newNeighbor, newNeighborEdge);
+                    fringe.add(newNeighbor);
+                }
+            }
+        }
+
+        if (tree.getAllEdges().size() + 1 < this.getAllVertices().size()) {
+            return null;
+        }
+        return tree;
     }
 
     public Graph kruskals() {
@@ -128,25 +178,26 @@ public class Graph {
         return null;
     }
 
-    /* A comparator to help you compare vertices in terms of
+    /*
+     * A comparator to help you compare vertices in terms of
      * how close they are to the current MST.
      * Feel free to uncomment the below code if you'd like to use it;
      * otherwise, you may implement your own comparator.
      */
-//    private class PrimVertexComparator implements Comparator<Integer> {
-//        private HashMap<Integer, Edge> distFromTree;
-//
-//        public PrimVertexComparator(HashMap<Integer, Edge> distFromTree) {
-//            this.distFromTree = distFromTree;
-//        }
-//
-//        @Override
-//        public int compare(Integer o1, Integer o2) {
-//            int edgeCompRes = distFromTree.get(o1).compareTo(distFromTree.get(o2));
-//            if (edgeCompRes == 0) {
-//                return o1 - o2;
-//            }
-//            return edgeCompRes;
-//        }
-//    }
+    private class PrimVertexComparator implements Comparator<Integer> {
+        private HashMap<Integer, Edge> distFromTree;
+
+        public PrimVertexComparator(HashMap<Integer, Edge> distFromTree) {
+            this.distFromTree = distFromTree;
+        }
+
+        @Override
+        public int compare(Integer o1, Integer o2) {
+            int edgeCompRes = distFromTree.get(o1).compareTo(distFromTree.get(o2));
+            if (edgeCompRes == 0) {
+                return o1 - o2;
+            }
+            return edgeCompRes;
+        }
+    }
 }
