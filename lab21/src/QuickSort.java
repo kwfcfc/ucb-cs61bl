@@ -37,7 +37,7 @@ public class QuickSort {
         int a = arr[start], b = arr[middle], c = arr[end - 1];
         if ((a <= b && b <= c) || (c <= b && b <= a))
             swap(arr, start, middle);
-        if ((a <= c && c <= b) || (b <= c && c <= a))
+        else if ((a <= c && c <= b) || (b <= c && c <= a))
             swap(arr, start, end - 1);
     }
 
@@ -59,21 +59,30 @@ public class QuickSort {
             return new int[] { start, end };
         setPivot(arr, start, end);
         int pivot = arr[start];
-        int left = start + 1;
-        int right = end - 1;
-        while (left <= right) {
-            for (; left <= right && arr[left] <= pivot; ++left)
-                ;
-            for (; left <= right && arr[right] > pivot; --right)
-                ;
 
-            if (left <= right) {
-                swap(arr, left, right);
+        int iter = start + 1;
+        int left = start;
+        int right = end;
+
+        // 3-scan partition
+        while (iter < right) {
+            // left part is partitioned
+            if (arr[iter] < pivot) {
+                swap(arr, iter, left);
+                ++left;
+                ++iter;
+            } else if (arr[iter] > pivot) {
+                // right part is not yet partitioned, do not increment i and 
+                // compare the new element 
+                --right;
+                swap(arr, iter, right);
+            } else {
+                // equal to pivot, ignore the part
+                ++iter;
             }
         }
 
-        swap(arr, right, start);
-        return new int[] { right, left };
+        return new int[] { left, right };
     }
 
     /**
